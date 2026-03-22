@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "critical-thinking", "runs": [{"id": "policy-tradeoff-with_skill", "prompt": "My startup has 12 employees and we're growing fast. We need to decide between offering unlimited PTO or a structured 25-day PTO policy. Our team is split \u2014 engineers want unlimited, the ops team wants structured. We're also about to raise our Series A and investors will see our policies. Help me think through this decision.", "eval_id": 1, "outputs": [{"name": "response.md", "type": "text", "content": "# PTO Policy Decision: Unlimited vs. 25-Day Structured\n\n## The Real Question\n\nBefore choosing between policies, let's step back: **Are you trying to optimize for employee happiness, investor confidence, operational clarity, or something else?** These often point in different directions, and conflating them is where founders make their first mistake.\n\nHere's what I'd press on: You have a team split, which is actually valuable information. But the split may not be what it first appears to be.\n\n---\n\n## Unpacking the Assumptions\n\n**What engineers probably mean by \"unlimited\":**\n- They want to feel trusted and not micromanaged\n- They want to avoid the guilt of \"using up\" vacation days\n- They suspect a 25-day policy will feel stingy (are we comparing to European standards of 25+10 bank holidays, or US norms of 15-20 total?)\n\n**What ops probably means by \"structured\":**\n- They're worried about coordination costs: if everyone takes time off whenever, projects stall\n- They've seen or experienced the \"phantom unlimited\" problem: teams with unlimited PTO often take *less* vacation than those with a budget\n- They want predictability for planning and handoffs\n\n**Here's the uncomfortable truth both sides may be avoiding:** Most unlimited PTO policies fail because **absence norms overwhelm policy.** If everyone else is taking 2 weeks a year, your \"unlimited\" employee who takes 4 weeks feels like they're taking advantage. Conversely, a structured 25-day policy can feel generous or stingy depending on how it's communicated and modeled by leadership.\n\nThe policy itself matters less than the *culture around time off*. If your CEO takes 2 weeks, no policy will make engineers feel safe taking more.\n\n---\n\n## The Tradeoffs (Clarity, Logic, and Depth)\n\n### Unlimited PTO\n\n**True advantages:**\n- Signals maturity and trust (valuable for recruiting senior engineers who've seen this done well)\n- Removes the resentment of accrual, carryover limits, and \"use it or lose it\"\n- Avoids the overhead of tracking accrued days\n- More flexible for remote/async teams\n\n**Real risks:**\n- Creates ambiguity about what's acceptable. At 12 people, informal norms might work. At 40+, someone will take 8 weeks and create a precedent nobody intended\n- Operationally harder to plan around (unless you force people to schedule in advance)\n- Can backfire on retention: studies suggest unlimited often *correlates* with *lower* average time off, and employees feel guilty taking it\n- Investors sometimes view it as a proxy for lax culture or founders who haven't thought through operations\n- Creates legal liability questions: if you later challenge someone's usage, you've admitted it's discretionary, which opens debates\n\n**Investor angle:** Most VCs don't care whether you say \"unlimited\" or \"25 days.\" They care that you have a **clear policy you'll enforce consistently** and that you're not hemorrhaging people. Unlimited is not a red flag, but it's also not a strong signal in your favor.\n\n### 25-Day Structured\n\n**True advantages:**\n- Clear, eliminates ambiguity in conversations\n- Easier to plan around at scale\n- Feels generous in the US context (most companies offer 15-20 total)\n- Gives engineers a guarantee (you *will* get at least this much)\n- Easier to administer\n\n**Real risks:**\n- Can feel like you're counting beans when you pitch it\n- If you cap at 25 and don't allow carryover, people resent losing days\n- May feel less \"trusting\" to some\n- Doesn't actually solve the ops' coordination problem unless you also put in place a scheduling/coverage system\n\n**Investor angle:** Same as above\u2014clarity and consistency matter more than the number.\n\n---\n\n## What Investors Actually Look For\n\nYou're raising Series A. Here's what investors will actually scrutinize:\n\n1. **Is there a clear, written policy?** (Absence signals chaos)\n2. **Does the CEO model it?** (If you're taking 3 weeks, you're communicating that 3 weeks is normal, regardless of what the policy says)\n3. **Are you retaining people?** (The policy is part of this, but not the whole story)\n4. **Can you articulate *why* you chose it?** (Credibility > the specific choice)\n\nInvestors do not believe unlimited PTO is a weakness or a strength. They believe **thoughtful policy + leadership modeling + retention = healthy culture**. They would slightly prefer clarity (25-day) over ambiguity (unlimited), but it's a weak preference.\n\n---\n\n## The Implications and Longer View\n\n**If you choose unlimited:**\n- You're betting that your culture will enforce the norm (feasible at 12, risky at 50)\n- You're signaling to engineers that you trust autonomy\n- You're avoiding the bureaucracy now, but you may face it later when someone takes a lot of time and you need to rein them in\n- You can always tighten later by saying \"this isn't working at scale, we're moving to 25\"\n\n**If you choose 25-day structured:**\n- You're making a choice that scales (easier to stay consistent at 100 people)\n- You're signaling that you've thought about operations\n- You're giving a concrete guarantee that may feel less \"unlimited\" but is actually more secure\n- You can always loosen later by saying \"we're strong enough to be more flexible\"\n\nOne is not more mature than the other. They're different trade-offs.\n\n---\n\n## My Honest Assessment\n\n**The decision should probably be 25-day structured, for these reasons:**\n\n1. **You're split internally.** That split signals that \"unlimited\" won't feel trusted to everyone. A clear 25-day policy removes that tension at the source.\n\n2. **You're at the hardest scale.** At 12 people, you're big enough that norms aren't automatic, but small enough that one person's behavior will define the culture going forward. Clarity helps.\n\n3. **Series A fundraising is the wrong time to be ambiguous.** Not because investors care about the number, but because you want one fewer thing to explain. \"We offer 25 days, competitive in our market, we encourage people to take it, leadership models it\" is a 10-second answer. \"We offer unlimited but the culture is...\" is a longer conversation that feels defensive.\n\n4. **The ops team's real concern is valid.** As you scale to 20, 30, 40 people, coordination around time off matters. A structured policy makes that easier to manage. Unlimited + reactive scheduling = chaos.\n\n5. **You can sweeten the deal.** If you land on 25 days, you can offer additional things the engineers actually want:\n   - Full flexibility around *when* they take it (no blackout dates)\n   - First-day unpaid sick leave doesn't count against PTO (reduces the \"should I use a PTO day or a sick day\" anxiety)\n   - Sabbatical eligibility after X years\n   - Explicit modeling: you (the CEO) should publicly take 3+ weeks, and not apologize for it\n\n6. **You leave yourself room to evolve.** Once you raise Series A, you can always add perks. \"We're now offering 30 days\" or \"we're experimenting with semi-sabbaticals\" looks like you're learning and growing. \"We had unlimited and we're now rationing it\" looks reactive and defensive.\n\n---\n\n## What to Do Now\n\n**Before you decide, test your actual assumptions:**\n- Ask the engineers specifically: is it unlimited you want, or is it the *feeling* of autonomy and trust? (You may find they want the latter, which 25 days + culture can deliver)\n- Ask the ops team: what specifically breaks at 12 people if some take 5 weeks and others take 1? Is it real or imagined? (The answers might let you design guardrails rather than policies)\n- Look at your retention and exit interview data (if you have any). Is turnover driven by PTO policy or by something else?\n\n**The decision framework:**\n- If engineers will feel deeply distrusted by 25 days, and you have the culture to enforce unlimited, go unlimited. But be explicit about norms.\n- If ops' concern is real and engineers can accept 25 days + explicit leadership modeling, go structured. It's the grown-up choice at scale.\n- Whatever you choose, communicate it as \"we've thought about this and here's why.\" That's what investors actually care about.\n\n**One final note on fairness:** The engineers and ops team aren't actually in conflict here. They both want the same thing\u2014a workplace that trusts them and works smoothly. They're just reasoning from different vantage points (individual autonomy vs. collective coordination). Your job is to name that out loud, and choose the policy that honors both concerns, even if it doesn't fully satisfy either one.\n\n---\n\n## The Decision\n\n**Go with 25 days structured. Here's how you pitch it:**\n\n\"We've decided on 25 days of PTO annually, which is generous and competitive. We're clear about this policy because clarity builds trust more than ambiguity. And we're crystal clear that leadership takes time off\u2014I take mine, and I expect everyone to do the same. Time off isn't a privilege you earn; it's part of how we stay healthy and sustainable.\"\n\nThen model it.\n"}], "grading": {"expectations": [{"text": "Explicitly questions or reframes the user's original framing before diving into analysis", "passed": true, "evidence": "Opens with 'Before choosing between policies, let's step back: Are you trying to optimize for employee happiness, investor confidence, operational clarity, or something else? These often point in different directions, and conflating them is where founders make their first mistake.'"}, {"text": "Surfaces the counterintuitive insight that unlimited PTO often leads to employees taking LESS time off", "passed": true, "evidence": "Explicitly states: 'teams with unlimited PTO often take *less* vacation than those with a budget' and later 'studies suggest unlimited often *correlates* with *lower* average time off, and employees feel guilty taking it'"}, {"text": "Names at least 3 specific unstated assumptions held by either the engineers or the ops team", "passed": true, "evidence": "Full 'Unpacking the Assumptions' section names: (1) engineers want trust not micromanagement, (2) engineers suspect 25 days will feel stingy, (3) ops worries about coordination costs, (4) ops has seen 'phantom unlimited' problem, (5) ops wants predictability. Then adds the meta-assumption: 'The policy itself matters less than the culture around time off.'"}, {"text": "Addresses what Series A investors actually care about", "passed": true, "evidence": "Dedicated 'What Investors Actually Look For' section with 4 specific points: clear written policy, CEO modeling, retention, and ability to articulate reasoning. States 'Investors do not believe unlimited PTO is a weakness or a strength. They believe thoughtful policy + leadership modeling + retention = healthy culture.'"}, {"text": "Traces second-order implications (what happens at 40-50 employees, not just at 12)", "passed": true, "evidence": "'At 12 people, informal norms might work. At 40+, someone will take 8 weeks and create a precedent nobody intended' and 'You're making a choice that scales (easier to stay consistent at 100 people)'"}, {"text": "Considers the fairness dimension \u2014 how each policy affects different types of employees unequally", "passed": true, "evidence": "Final section addresses fairness: 'The engineers and ops team aren't actually in conflict here... They're just reasoning from different vantage points (individual autonomy vs. collective coordination).' Also in the assumptions section notes how absence norms affect people asymmetrically."}, {"text": "Provides a clear recommendation with reasoning rather than just presenting both sides neutrally", "passed": true, "evidence": "Clear 'My Honest Assessment' section with numbered reasoning, followed by 'The Decision: Go with 25 days structured' and a specific pitch script."}], "summary": {"passed": 7, "failed": 0, "total": 7, "pass_rate": 1.0}}}, {"id": "policy-tradeoff-without_skill", "prompt": "My startup has 12 employees and we're growing fast. We need to decide between offering unlimited PTO or a structured 25-day PTO policy. Our team is split \u2014 engineers want unlimited, the ops team wants structured. We're also about to raise our Series A and investors will see our policies. Help me think through this decision.", "eval_id": 1, "outputs": [{"name": "response.md", "type": "text", "content": "# PTO Policy Decision: Unlimited vs. Structured\n\nThis is a genuinely hard call, and the team split reflects real tradeoffs rather than one side being clearly wrong. Let me walk through what matters most here.\n\n## The actual stakes\n\nYou're at an inflection point where this decision matters more than it might at a 50-person company. At 12 people, culture is still being set\u2014whatever you choose will shape what kind of company you become. And yes, investors will care, but probably not the way you think.\n\n## Why unlimited PTO appeals to engineers\n\nEngineers tend to gravitate toward unlimited PTO because:\n- **Autonomy signal**: It says you trust them to manage their own schedules\n- **No friction**: No need to negotiate or ask permission\n- **Self-selection**: High-performing people often take *less* time off and like having the option\n- **Simple for remote work**: Harder to police anyway when teams are distributed\n\nThe appeal is real, and there's research showing unlimited PTO cultures can attract strong independent contributors.\n\n## Why it's risky at your stage\n\nThe honest truth: unlimited PTO often becomes \"unclear PTO\" at startups. Here's what actually happens:\n\n1. **Implicit peer pressure takes over**. If the person next to you never takes two weeks off, you won't either\u2014even if it's \"unlimited.\" This especially hits early-stage teams where people are already working hard to prove themselves.\n\n2. **No one actually tracks usage**. This creates liability. When you're small, you're not thinking about FMLA compliance or state-specific leave laws, but if someone later contests their termination or comp changes, vague policies become expensive.\n\n3. **You lose visibility into burnout**. One of the underrated functions of structured PTO is that it's a forcing function for handoffs, knowledge transfer, and actually disconnecting. Teams that don't take time together tend to burn hot and burn out.\n\n4. **It favors certain types**. Unlimited PTO mathematically favors people who are comfortable speaking up (often more senior) and disadvantages people who are more conflict-averse\u2014which often correlates with underrepresented groups. You'll end up with unequal actual time off.\n\n## Why structured PTO has benefits you shouldn't dismiss\n\n25 days (roughly 5 weeks) is actually generous and not controversial:\n\n- **Clarity is a feature, not a limitation**. People spend less mental energy wondering if they're taking \"too much.\" This is especially important when you're fundraising and pivoting constantly\u2014you want people to actually rest, not feel perpetually guilty.\n\n- **It scales cleanly**. When you go from 12 to 50 to 150 people, a clear policy doesn't require rethinking. Unlimited PTO often forces eventual conversations about \"realistic expectations\" that feel like a bait-and-switch.\n\n- **Investors actually prefer this**. Most institutional investors have seen unlimited PTO policies fail quietly and then become contentious. A clear, generous structured policy signals maturity and reduces future conflict. They'll respect that more than \"unlimited\" without teeth.\n\n- **It levels the playing field**. Junior employees, parents, and introverts are more likely to actually use it without feeling weird.\n\n## What your Series A investors actually think\n\nInvestors will notice and care about one thing: **coherence and maturity**. They're evaluating whether your policies reduce or increase future friction.\n\n- **Unlimited PTO**: They'll think \"scrappy startup\" or \"we'll address this at scale\" (which can be positive), but if asked directly, most will note it often creates more problems than it solves.\n- **Structured PTO at 25 days**: They'll see this as thoughtful and intentional. It signals you've thought about team health, legal compliance, and fairness. This is a strength in the fundraising narrative.\n\nNo serious investor is walking away from a good company because of 25 days of PTO. They'd walk away if your policy seems like it creates internal tension or suggests you haven't thought through basics.\n\n## The engineer/ops split\u2014what it really means\n\nYour engineers want unlimited partly because they value autonomy and trust. Your ops team wants structure partly because they think about compliance, consistency, and fairness. **Both instincts are right.**\n\nThe question is which risk you want to take:\n- Unlimited: Risk is burnout, invisible inequality, and future awkwardness\n- Structured: Risk is that some people feel the policy constrains them (though 25 days is hard to frame that way)\n\n## My recommendation\n\n**Go with 25-day structured PTO, but do it right.**\n\nHere's how to address the engineer concern without backing down:\n\n1. **Frame it as trust + clarity**, not restriction. The policy says: \"We trust you enough to give you this upfront. We trust you to take it. We're clear about it so no one has to wonder.\"\n\n2. **Build in one explicit flex lever**: Allow the accumulation of 5 unused days once per year to the next year (capped at 10 total). This gives the high-performer who genuinely didn't take much time the option to bank it without needing to ask permission case-by-case.\n\n3. **Make it part of the Series A story**. When you're pitching, mention that you've built thoughtful, equitable policies that reduce future friction. Investors eat this up. Frame it as evidence of operational maturity.\n\n4. **Actually enforce it**. This matters. Managers should gently make sure people take time off. The policy only works if it's normalized, not aspirational.\n\n## The deeper move\n\nConsider using this moment to discuss what the team actually values in PTO policy rather than just settling the unlimited vs. structured question. Maybe it's not purely about the number of days. Maybe it's about:\n\n- Flexibility for how days are taken (single days? sabbatical-style breaks?)\n- Truly disconnecting (no Slack expectation on PTO)\n- Paid parental leave (especially if you've got team members at that life stage)\n- Ability to take unpaid sabbaticals after X years\n\nA 25-day base policy with thoughtful add-ons might satisfy both sides better than endless debate between two poles.\n\n## In practice\n\nAt 12 people, you can actually row back from this if it's not working. The best policy is one you can execute consistently and that your team believes in, even if it's not perfect. A clear 25-day policy executed well beats an unlimited policy that creates anxiety.\n\nYou're still small enough that personal relationships matter more than policy. Use that. Get alignment with your team, explain the reasoning (which you now have), and actually invest in making sure people rest.\n\nGood luck with the raise\u2014this kind of thoughtfulness about culture is the differentiator at your stage.\n"}], "grading": {"expectations": [{"text": "Explicitly questions or reframes the user's original framing before diving into analysis", "passed": false, "evidence": "Opens with 'This is a genuinely hard call, and the team split reflects real tradeoffs rather than one side being clearly wrong.' Does not reframe the question or challenge the binary framing \u2014 proceeds directly into analysis of the two options as presented."}, {"text": "Surfaces the counterintuitive insight that unlimited PTO often leads to employees taking LESS time off", "passed": true, "evidence": "States: 'Implicit peer pressure takes over. If the person next to you never takes two weeks off, you won't either\u2014even if it's \"unlimited.\"'"}, {"text": "Names at least 3 specific unstated assumptions held by either the engineers or the ops team", "passed": false, "evidence": "Lists reasons engineers want unlimited PTO and reasons ops prefers structure, but frames these as preferences/motivations rather than as assumptions that could be examined or challenged. Does not call out the assumptions as assumptions."}, {"text": "Addresses what Series A investors actually care about", "passed": true, "evidence": "'Investors will notice and care about one thing: coherence and maturity. They're evaluating whether your policies reduce or increase future friction.'"}, {"text": "Traces second-order implications (what happens at 40-50 employees, not just at 12)", "passed": true, "evidence": "'When you go from 12 to 50 to 150 people, a clear policy doesn't require rethinking. Unlimited PTO often forces eventual conversations about \"realistic expectations\" that feel like a bait-and-switch.'"}, {"text": "Considers the fairness dimension \u2014 how each policy affects different types of employees unequally", "passed": true, "evidence": "'It favors certain types. Unlimited PTO mathematically favors people who are comfortable speaking up (often more senior) and disadvantages people who are more conflict-averse\u2014which often correlates with underrepresented groups.' Also: 'Junior employees, parents, and introverts are more likely to actually use it without feeling weird.'"}, {"text": "Provides a clear recommendation with reasoning rather than just presenting both sides neutrally", "passed": true, "evidence": "'Go with 25-day structured PTO, but do it right.' Followed by 4 specific implementation steps."}], "summary": {"passed": 5, "failed": 2, "total": 7, "pass_rate": 0.71}}}, {"id": "flawed-argument-with_skill", "prompt": "My coworker sent me this argument and I'm not sure what to think: 'We should switch our entire backend from Python to Rust. Our page load times are slow, Rust is the fastest language in benchmarks, and companies like Discord and Cloudflare moved to Rust and saw huge improvements. The rewrite would take about 6 months with our team of 4 backend devs.' Can you evaluate the strength of this argument?", "eval_id": 2, "outputs": [{"name": "response.md", "type": "text", "content": "# Critical Evaluation: The Case for Switching to Rust\n\n## Overview\n\nYour coworker's argument for a Python-to-Rust migration contains some legitimate intuitions but suffers from significant logical gaps and unstated assumptions. The reasoning isn't fundamentally flawed, but it conflates correlation with causation, cherry-picks evidence, and glosses over the actual constraints of your specific situation. Let me walk through the strengths and weaknesses.\n\n## What the Argument Gets Right\n\nThe argument correctly identifies that:\n- Slow page load times are a real problem worth investigating\n- Rust is generally faster than Python in benchmarks\n- Companies like Discord and Cloudflare have invested heavily in Rust\n\nThese are accurate facts. The question is whether they actually support the conclusion.\n\n## The Core Problem: Hasty Generalization from Others' Success\n\nThe argument assumes that because Discord and Cloudflare benefited from Rust, *your team* will too. This is a classic hasty generalization. A few critical details matter:\n\n**Why those companies migrated to Rust (and why it might not apply to you):**\n\n- Discord and Cloudflare are handling extreme scale (billions of requests, microsecond-level latency requirements). If your backend is experiencing typical web application load, speed gains from language choice alone might be marginal.\n- Both companies migrated *specific components* (not their entire backend) where performance was the bottleneck. They likely profiled first and discovered that Python itself was the limiting factor\u2014not database queries, network calls, or algorithm efficiency.\n- Both had massive engineering teams. A 6-month rewrite is an estimate that assumes perfect knowledge of the existing system, zero unexpected issues, and no context-switching costs. Real rewrites often take 50-100% longer.\n\n**The missing diagnostic step:** Has anyone actually profiled your application to determine *what's making pages slow?* If the slowness comes from:\n- Database queries (fix the queries, not the language)\n- Blocking I/O (fix with async Python or caching)\n- Algorithmic inefficiency (fix the algorithm)\n- Network latency (fix the infrastructure)\n\n...then Rust won't help. Speed issues are rarely a language problem. They're usually a *systems* problem.\n\n## Hidden Assumptions That Weaken the Argument\n\n1. **\"Our team can learn Rust effectively in 6 months\"** \u2014 Rust has a steep learning curve. Shipping production Rust is different from learning syntax. How many developers have shipped Rust in production? What's the team's appetite for that risk?\n\n2. **\"The rewrite will take 6 months\"** \u2014 This assumes you know the codebase well enough to estimate a complete rewrite. Reality: partial rewrites uncover unknown complexity, integration bugs, and edge cases that exist in live Python code but only surface during a rewrite.\n\n3. **\"We won't need to maintain the Python system during the transition\"** \u2014 Most teams need to keep the old system running while the new one is built. That's two codebases, two deployment pipelines, data synchronization challenges, and doubled context-switching overhead.\n\n4. **\"Performance will automatically improve\"** \u2014 Rust makes certain classes of bugs impossible (memory safety, data races). It doesn't make slow algorithms fast or prevent architectural mistakes. A badly designed system in Rust is still slow.\n\n## What the Argument Ignores\n\n- **Operational complexity**: Rust systems often require more infrastructure expertise (dependency management, build tooling, runtime considerations). Is your ops team ready?\n- **Developer productivity**: Python's ecosystem for common tasks (data processing, web frameworks, rapid prototyping) is mature. Rust's is growing but lags in many areas.\n- **Hiring and onboarding**: Rust developers are scarcer and more expensive. Can you hire two more engineers faster than you can solve your actual performance problem?\n- **Risk**: A failed or delayed rewrite leaves you with an incomplete Rust system, a team that's now less familiar with Python, and no time for other improvements.\n- **Alternative solutions**: Load testing, database optimization, caching strategies, async processing, horizontal scaling, and algorithmic improvements might solve your problem in weeks instead of months.\n\n## A More Rigorous Approach\n\nBefore considering a language migration, your team should:\n\n1. **Profile the application in production** \u2014 Use tools to identify exactly where time is being spent. Is it CPU? I/O? Memory?\n\n2. **Measure impact of targeted improvements** \u2014 Try optimizing the slowest path in Python (better queries, caching, async). How much improvement is possible without rewriting?\n\n3. **Calculate the cost-benefit** \u2014 Compare the estimated effort of the Rust rewrite against the estimated benefit. If profiling shows Python is the bottleneck and async Python doesn't help, *then* Rust becomes more defensible.\n\n4. **Consider alternatives** \u2014 Could you rewrite just the hot path in Rust (while keeping the rest in Python)? Could you solve the problem with infrastructure changes?\n\n5. **Assess organizational readiness** \u2014 Is your team experienced enough with Rust? Does your ops team have capacity? Can you afford 6+ months of reduced feature velocity?\n\n## The Verdict\n\nThe argument is **weak to moderate in strength**. It rests on accurate facts but draws a conclusion that isn't well-supported by the evidence presented. The argument would become significantly stronger if your team could answer:\n\n- \"We profiled the application and Python itself is the bottleneck (not queries, I/O, or algorithms)\"\n- \"We've attempted optimizations in Python and hit a hard ceiling\"\n- \"Our team has production Rust experience or strong appetite to learn\"\n- \"We can afford 6-9 months of reduced feature velocity\"\n- \"We've confirmed this rewrite would unblock a major business constraint\"\n\nWithout those answers, the argument is premature. It jumps to a dramatic conclusion before doing the diagnostic work that would justify it.\n\nYour coworker isn't wrong that Rust is fast\u2014they're just wrong that speed automatically transfers to your problem without understanding what the problem actually is.\n"}], "grading": {"expectations": [{"text": "Names at least one specific logical fallacy or reasoning error by type", "passed": true, "evidence": "Explicitly names 'hasty generalization' \u2014 'The argument assumes that because Discord and Cloudflare benefited from Rust, *your team* will too. This is a classic hasty generalization.'"}, {"text": "Identifies the critical missing diagnostic step: profiling the application", "passed": true, "evidence": "Dedicated section: 'The missing diagnostic step: Has anyone actually profiled your application to determine *what's making pages slow?*' Lists 4 possible causes that Rust wouldn't fix."}, {"text": "Lists at least 3 specific unstated assumptions in the coworker's argument", "passed": true, "evidence": "Section 'Hidden Assumptions That Weaken the Argument' lists 4 numbered assumptions: (1) team can learn Rust in 6 months, (2) rewrite will take 6 months, (3) won't need to maintain Python during transition, (4) performance will automatically improve."}, {"text": "Fairly acknowledges what the argument gets right before critiquing its weaknesses", "passed": true, "evidence": "Opens with 'What the Argument Gets Right' section acknowledging three valid points before proceeding to critique."}, {"text": "Proposes concrete alternative approaches", "passed": true, "evidence": "'A More Rigorous Approach' section with 5 numbered steps: profile in production, measure targeted improvements, calculate cost-benefit, consider alternatives (partial Rust migration), assess organizational readiness."}, {"text": "Identifies conditions under which the argument WOULD become stronger", "passed": true, "evidence": "'The argument would become significantly stronger if your team could answer:' followed by 5 specific conditions including profiling results, hitting a Python ceiling, team Rust experience, feature velocity tolerance, and business constraint confirmation."}, {"text": "Addresses human/organizational costs beyond technical considerations", "passed": true, "evidence": "'What the Argument Ignores' section covers operational complexity, developer productivity, hiring/onboarding difficulty, risk of incomplete migration, and alternative solutions."}], "summary": {"passed": 7, "failed": 0, "total": 7, "pass_rate": 1.0}}}, {"id": "flawed-argument-without_skill", "prompt": "My coworker sent me this argument and I'm not sure what to think: 'We should switch our entire backend from Python to Rust. Our page load times are slow, Rust is the fastest language in benchmarks, and companies like Discord and Cloudflare moved to Rust and saw huge improvements. The rewrite would take about 6 months with our team of 4 backend devs.' Can you evaluate the strength of this argument?", "eval_id": 2, "outputs": [{"name": "response.md", "type": "text", "content": "# Evaluating the \"Switch Backend to Rust\" Argument\n\nThis is a well-intentioned argument with some valid points, but it has significant logical gaps and oversimplifies a complex decision. Here's a breakdown:\n\n## What's Reasonable in the Argument\n\n**Rust is genuinely fast.** The language itself is performant, and it eliminates certain classes of bugs related to memory management. That part checks out.\n\n**The success stories are real.** Discord and Cloudflare did move components to Rust and reported improvements. These are legitimate examples of Rust providing value in production systems.\n\n## Major Problems with the Logic\n\n### 1. **Assumes Language Speed = Page Load Speed**\n\nThis is the weakest link. Page load times depend on many factors:\n- Database query performance and caching strategy\n- Network latency and frontend optimization\n- API response times\n- Frontend code efficiency\n- Infrastructure and CDN setup\n\nA slow Python backend might actually spend 80% of its time waiting on database queries. Rewriting in Rust won't fix a poorly optimized database. The argument never investigates *why* pages load slowly.\n\n### 2. **Dismisses the Cost of a Rewrite**\n\n\"Six months with 4 developers\" sounds clean until you think it through:\n- That's roughly 800 engineer-weeks of effort (accounting for some parallelization)\n- During that time, you can't ship new features or maintain existing ones effectively\n- You're betting your velocity on a complete rewrite with no incremental value delivered\n- Any bugs in the new Rust code become production incidents affecting the entire backend\n\nRewrites are notoriously risky and often overrun estimates.\n\n### 3. **Ignores Hidden Costs**\n\n- Learning curve: Python developers need to become proficient in Rust (months, not weeks)\n- Testing burden: You need comprehensive tests to ensure the rewrite is correct\n- Operational risk: Rust has different deployment, monitoring, and debugging workflows\n- Opportunity cost: Those 4 developers could be building product features, fixing bugs, or improving existing infrastructure\n- Long-term hiring: Rust developers are harder to find than Python developers\n\n### 4. **One-Dimensional Thinking**\n\nThe argument treats language choice as the primary variable, but that's rarely where bottlenecks live. Most slow applications are slow because of:\n- Query N+1 problems\n- Missing database indexes\n- Inefficient algorithms\n- Poor caching strategy\n- Unoptimized frontend\n\nFixing these requires analysis and targeted improvements, not a language swap.\n\n### 5. **Conflates Correlation with Causation**\n\nDiscord and Cloudflare saw improvements *after* moving to Rust, but that doesn't mean Rust caused the improvements. They likely:\n- Optimized their architecture while rewriting\n- Fixed long-standing performance issues\n- Redesigned data structures for efficiency\n- Added caching layers\n\nThe same improvements might've been possible with Python if those architectural changes had been made.\n\n## What Should Actually Happen\n\nBefore committing to a rewrite, your coworker should ask:\n\n1. **What's actually slow?** Profile the application. Where is time being spent? (Database, computation, I/O, network?)\n2. **Can we fix it incrementally?** Most performance problems have targeted solutions that don't require a full rewrite.\n3. **What would the ROI be?** If the bottleneck is database queries, Rust won't help. If it's CPU-intensive computation in specific components, maybe a Rust microservice makes sense for *just that part*.\n4. **Are we sure it's a language issue?** 99% of the time, poor performance in Python comes from bad architecture or inefficient queries, not the language itself.\n\n## The Verdict\n\nThis argument has the structure of a good case (identify a problem, propose a solution, cite evidence) but lacks rigor in connecting the dots. It's the kind of thing that sounds compelling in a meeting but falls apart under scrutiny.\n\n**Better approach:** Spend 2-3 weeks profiling the application to identify the actual bottlenecks. *Then* decide if a language change makes sense. You might discover that a specific microservice should be Rust, or you might find that you can 10x performance through targeted optimizations. Either way, you'll be making an informed decision instead of a bet.\n\nThe 6-month timeline and full rewrite should be a red flag\u2014that's expensive and risky. Even if Rust is the right answer, doing the *entire* backend is probably the wrong approach.\n"}], "grading": {"expectations": [{"text": "Names at least one specific logical fallacy or reasoning error by type", "passed": true, "evidence": "Section heading 'Conflates Correlation with Causation' \u2014 names the fallacy explicitly."}, {"text": "Identifies the critical missing diagnostic step: profiling the application", "passed": true, "evidence": "'What's actually slow? Profile the application. Where is time being spent? (Database, computation, I/O, network?)'"}, {"text": "Lists at least 3 specific unstated assumptions in the coworker's argument", "passed": false, "evidence": "Identifies logical problems (language speed \u2260 page load speed, underestimated cost, hidden costs, one-dimensional thinking, correlation \u2260 causation) but frames these as 'problems with the logic' rather than as unstated assumptions. Does not explicitly name what the coworker is *taking for granted* in a structured way \u2014 e.g., doesn't surface assumptions like 'the team can learn Rust in 6 months' or 'they won't need to maintain Python during transition.'"}, {"text": "Fairly acknowledges what the argument gets right before critiquing its weaknesses", "passed": true, "evidence": "Opens with 'What's Reasonable in the Argument' section acknowledging Rust's speed and legitimate success stories."}, {"text": "Proposes concrete alternative approaches", "passed": true, "evidence": "4 numbered questions in 'What Should Actually Happen' including profiling, incremental fixes, ROI calculation, and confirming language is the issue."}, {"text": "Identifies conditions under which the argument WOULD become stronger", "passed": false, "evidence": "Final paragraph mentions 'you might discover that a specific microservice should be Rust' but doesn't systematically lay out conditions under which the full argument would be justified. No explicit framing of 'if X, Y, and Z were true, the argument would be strong.'"}, {"text": "Addresses human/organizational costs beyond technical considerations", "passed": true, "evidence": "Section 3 'Ignores Hidden Costs' covers learning curve, testing burden, operational risk, opportunity cost, and hiring difficulty."}], "summary": {"passed": 5, "failed": 2, "total": 7, "pass_rate": 0.71}}}, {"id": "ethical-scenario-with_skill", "prompt": "I'm a manager. One of my best performers just confided in me that they've been interviewing at another company. They asked me to keep it confidential. But now my VP is asking me to assign a critical 6-month project and wants to know who on my team is most committed long-term. What should I do?", "eval_id": 3, "outputs": [{"name": "response.md", "type": "text", "content": "# How to Navigate This Ethical Tension\n\nThis is a genuinely hard situation, but the right path is clearer than it might first appear. Let me walk through why, and what to do.\n\n## The Core Question\n\nYour VP needs to make a smart staffing decision for a critical project. Your employee needs you to keep their confidence. These feel like they're in direct conflict\u2014but they're not, if you're thoughtful about what information your VP actually needs.\n\n## What You're Actually Dealing With\n\nFirst, let's be precise about what's at stake:\n\n- **The confidentiality promise** is real and specific. Your employee told you this in trust. Breaking that would damage their career (if it gets back to the other company) and fundamentally damage your relationship with them.\n- **Your VP's legitimate need** is also real. They need to understand team member commitment levels when making a 6-month project bet. This is reasonable.\n- **Your own integrity** is on the line too. You can't just make this disappear or lie about it. You need a solution that's honest to all parties.\n\nThe key insight: your VP doesn't actually need to know that *this specific person* is interviewing elsewhere. They need to know how to assess commitment relative to project duration. Those are different things.\n\n## What Not to Do\n\n**Don't volunteer the information.** Even if your VP doesn't ask directly, don't volunteer the detail that this employee is interviewing. That breaks the confidence and creates unnecessary risk for your employee.\n\n**Don't lie if directly asked.** If your VP asks \"Is [Employee] looking for other jobs?\" and you know they are, don't deny it. But you can redirect the conversation first (see below).\n\n**Don't use it against the employee.** Don't take this as a cue to exclude them from the project \"because they might leave.\" That's using confidential information to harm someone, and it's profoundly unfair.\n\n**Don't assume your employee would want you to stay silent at all costs.** They want their privacy protected, not for their manager to lie repeatedly or make worse business decisions as a result.\n\n## What To Do Instead\n\n### Step 1: Talk to Your VP First\u2014Reframe the Question\n\nWhen your VP asks about commitment, don't wait for them to ask about this employee specifically. Get ahead of it with an honest conversation about how you think about team composition for critical projects.\n\nSay something like: \"For a 6-month project, I want to talk about what commitment looks like. I'm happy to give you my honest read on everyone's current situation\u2014not just where people are job hunting, but what matters more: their engagement, growth trajectory, capability match, and what they're looking for professionally. Let me walk you through who makes sense here and why.\"\n\nThis shifts the conversation from \"Who's at risk of leaving?\" (which invades privacy and can create perverse incentives) to \"Who's actually set up to succeed on this work?\" That's the conversation worth having.\n\n### Step 2: Give Your VP What They Actually Need\n\nAssess your top performers on dimensions that matter for a 6-month project:\n- **Capability match**: Can they excel at this work? Do they want to?\n- **Current engagement**: Are they energized by their current role, or disengaged?\n- **Growth trajectory**: Does this project align with where they want to develop?\n- **Reliability**: Have they followed through on major commitments in the past?\n- **Stability indicators**: What signals suggest they're building toward something (good or bad) here?\n\nNotice: you can answer all these questions *without* having to disclose that someone is in active interviews. In fact, disengagement and limited growth opportunity are often the *real* reasons people start looking anyway. If your top performer is looking elsewhere, there's likely something in their current situation that isn't working\u2014and that's worth exploring with them, separately.\n\n### Step 3: If Your VP Asks Directly About This Employee\n\nIf your VP says \"What about [Employee]? I'm considering them for this project,\" you can respond honestly without volunteering the sensitive detail:\n\n\"[Employee] is excellent. They're highly capable and have delivered on everything I've asked. That said, I know they're actively thinking about what's next for their career\u2014as you should encourage good people to do. I'd want to talk with them about whether this project aligns with what they're looking for before committing them. Let me check with them and come back to you.\"\n\nThis is:\n- **Truthful**: You've confirmed they're thinking about next steps (which is how they framed it to you)\n- **Respectful of their confidence**: You haven't disclosed specifics of where they're interviewing\n- **Honest with your VP**: You're flagging that they may have other options\n- **Fair to your team**: You're not using confidential info to make worse decisions\n- **Smart about risk**: You're signaling that top talent needs to be engaged and developed\n\n### Step 4: Have a Separate Conversation With Your Employee\n\nSeparately, and soon, say something like: \"I want to talk about this project my VP is considering for you. Before I say yes or no on my end, I want to understand what you're looking for. Does this kind of work excite you? Does it fit with the direction you want to take your career? I know you're exploring options, and that makes sense\u2014I want you to be somewhere you're going to thrive. So let's figure out together whether this is the right move.\"\n\nThis shows:\n- You respect their autonomy and ambitions\n- You're not trying to trap them with a project that doesn't serve them\n- You're being a good manager, not a gatekeeper\n\nIf they say \"I'm really interested in this, I want to see where it goes before I make any moves,\" great\u2014you have clarity. If they say \"I'm seriously considering leaving,\" you've created space for an honest conversation about what would make them want to stay (or what might not be salvageable).\n\n## Why This Works\n\n**For your employee**: Their confidence is protected. They get an honest manager who respects their career autonomy.\n\n**For your VP**: You're giving them an informed, thoughtful recommendation based on real assessment of capability and fit, not forced exclusion based on gossip.\n\n**For you**: You're not lying. You're not betraying anyone's trust. You're making better decisions by focusing on what actually matters.\n\n**For the project**: You either get someone genuinely committed because the work aligns with their growth, or you don't put a reluctant person in a critical role.\n\n## The Larger Point\n\nYour employee confided in you because they trust you. The best way to honor that\u2014and to be a manager worth working for\u2014is not to lock down information airtight, but to use good judgment about what information serves what purpose.\n\nYour VP doesn't need to know someone is interviewing. They need to know if someone is engaged, capable, and a good fit. You can deliver on that without betraying anyone. And if it turns out your top performer leaves, your VP will at least know it wasn't because you excluded them from meaningful work or made them feel undervalued.\n\nDo this well, and you protect both relationships.\n"}], "grading": {"expectations": [{"text": "Identifies the tension as involving at least 3 distinct obligations or stakeholders", "passed": true, "evidence": "Explicitly identifies 3 distinct stakes: 'The confidentiality promise is real and specific,' 'Your VP's legitimate need is also real,' and 'Your own integrity is on the line too.' Later traces implications for employee, VP, manager, and the project."}, {"text": "Explicitly addresses what to do if the VP asks directly about this specific employee", "passed": true, "evidence": "Dedicated 'Step 3: If Your VP Asks Directly About This Employee' section with specific language: '[Employee] is excellent... That said, I know they're actively thinking about what's next for their career...'"}, {"text": "Proposes a reframing strategy that lets the manager answer the VP truthfully without violating the employee's confidence", "passed": true, "evidence": "Step 1 proposes shifting from 'Who's at risk of leaving?' to 'Who's actually set up to succeed on this work?' with specific suggested language. Step 2 provides 5 assessment dimensions that give the VP useful information without breaching confidence."}, {"text": "Recommends having a separate conversation with the employee about the project opportunity", "passed": true, "evidence": "Step 4 is entirely dedicated to this, with specific dialogue: 'I want to talk about this project my VP is considering for you... I know you're exploring options, and that makes sense\u2014I want you to be somewhere you're going to thrive.'"}, {"text": "Considers implications for all major parties (employee, manager, VP, and the project itself)", "passed": true, "evidence": "'Why This Works' section explicitly traces implications for each party: 'For your employee... For your VP... For you... For the project...'"}, {"text": "Provides specific language or conversational scripts the manager could actually use", "passed": true, "evidence": "Multiple specific scripts: VP reframing language in Step 1, 5-dimension assessment framework in Step 2, direct response script in Step 3, and employee conversation script in Step 4."}, {"text": "Resists oversimplifying to 'just keep quiet' or 'just tell the VP' \u2014 preserves the genuine complexity", "passed": true, "evidence": "Explicitly addresses 'What Not to Do' (4 items including don't volunteer info AND don't lie) and provides a multi-step approach that preserves complexity. Closing: 'not to lock down information airtight, but to use good judgment about what information serves what purpose.'"}], "summary": {"passed": 7, "failed": 0, "total": 7, "pass_rate": 1.0}}}, {"id": "ethical-scenario-without_skill", "prompt": "I'm a manager. One of my best performers just confided in me that they've been interviewing at another company. They asked me to keep it confidential. But now my VP is asking me to assign a critical 6-month project and wants to know who on my team is most committed long-term. What should I do?", "eval_id": 3, "outputs": [{"name": "response.md", "type": "text", "content": "# Navigating Competing Loyalties: A Manager's Dilemma\n\nThis is a genuinely difficult situation, but the path forward is clearer than it might initially feel. Here's how I'd approach it:\n\n## Respect the Confidence\n\nYour employee trusted you with sensitive personal information, and that trust is foundational to your relationship as a manager. Breaking that confidence\u2014especially by using it to exclude them from opportunities\u2014would be a profound breach. Even if you rationalize it as necessary for the business, they would inevitably discover what happened, and the damage to your credibility and their morale would be severe.\n\n## Don't Use the Information Against Them\n\nDo not mention their interview process to your VP, and do not use it as a factor in your staffing decision. Period. This isn't just about integrity; it's practical. People interview all the time and don't take other jobs. Your best performer might decide the other opportunity isn't right and recommit fully to your team. But if they learn you excluded them based on their private job search, you've just pushed them out the door.\n\n## Have a Direct Conversation with Your Employee\n\nOnce you know your VP needs someone for this project, sit down with your employee and be honest (without revealing what they told you). Say something like: \"I've got a major 6-month project coming up that needs our strongest contributor. I'd love your expertise on it. I know you're evaluating your options right now, and I get that. But I want to be transparent\u2014taking this on would signal to the company that you're invested in our direction, and it could affect how they view your future here.\"\n\nThis respects their autonomy while being candid about the realities of career capital and perception. It gives them the information they need to make an informed choice.\n\n## Be Honest with Your VP (Without Crossing Lines)\n\nYou can tell your VP something truthful without revealing confidences: \"I want to be thoughtful about this. I have someone in mind who's incredibly capable, but I want to make sure they're genuinely available for a 6-month commitment. Let me have a conversation and get back to you.\"\n\nIf your employee declines the project, then you have a legitimate business reason to assign it differently. If they accept it, you've got your answer about their commitment. Either way, you've handled it ethically.\n\n## Consider the Broader Context\n\nYour VP's question about \"long-term commitment\" is reasonable for a 6-month project. But it's also worth reflecting on: Why does loyalty matter so much here? If your organization were obviously a great place to build a career, people wouldn't need to interview elsewhere. That's not your fault, but it's worth knowing. You can't force commitment, but you can build an environment where people genuinely want to stay.\n\n## What You Shouldn't Do\n\n- Assign the project to someone less qualified to hedge your bets\n- Mention the job search to anyone, including HR (this crosses into retaliation territory)\n- Punish them with less desirable work or visibility\n- Assume they're already leaving and start checking out emotionally\n\n## The Bottom Line\n\nYour employee showed you trust by confiding in you. Honor that. Simultaneously, be straightforward about what the business needs and what career decisions might mean for perception and opportunity. Trust your people to make informed choices about their own careers. Most of the time, when you treat people with respect and transparency, they return it.\n\nAnd who knows? If you handle this well, they might discover that the opportunity they're exploring isn't what they thought, and they'll want to stay specifically because they work for someone who respected their autonomy even when it was inconvenient for the business.\n"}], "grading": {"expectations": [{"text": "Identifies the tension as involving at least 3 distinct obligations or stakeholders", "passed": false, "evidence": "Identifies employee trust and business need, and briefly mentions manager integrity ('your credibility'), but doesn't explicitly frame these as 3 distinct obligations with their own stakes. The framing stays mostly binary: respect confidence vs. business need."}, {"text": "Explicitly addresses what to do if the VP asks directly about this specific employee", "passed": true, "evidence": "'You can tell your VP something truthful without revealing confidences: \"I want to be thoughtful about this. I have someone in mind who's incredibly capable, but I want to make sure they're genuinely available for a 6-month commitment.\"'"}, {"text": "Proposes a reframing strategy that lets the manager answer the VP truthfully without violating the employee's confidence", "passed": true, "evidence": "Suggests framing around capability and availability rather than loyalty/commitment: 'I want to make sure they're genuinely available for a 6-month commitment. Let me have a conversation and get back to you.'"}, {"text": "Recommends having a separate conversation with the employee about the project opportunity", "passed": true, "evidence": "'Have a Direct Conversation with Your Employee' section with specific language about presenting the opportunity while respecting their autonomy."}, {"text": "Considers implications for all major parties (employee, manager, VP, and the project itself)", "passed": false, "evidence": "Considers employee and manager implications well. VP implications addressed briefly. Does not trace implications for the project itself (what happens if the person takes the project and then leaves mid-way, or if a less qualified person is assigned instead)."}, {"text": "Provides specific language or conversational scripts the manager could actually use", "passed": true, "evidence": "Provides scripts for both the VP conversation and the employee conversation with quoted dialogue."}, {"text": "Resists oversimplifying to 'just keep quiet' or 'just tell the VP' \u2014 preserves the genuine complexity", "passed": true, "evidence": "Multi-step approach: respect confidence, talk to employee, give VP truthful but bounded information. 'What You Shouldn't Do' list shows boundaries. Does preserve complexity, though slightly less nuanced than possible \u2014 'Do not mention their interview process to your VP' is somewhat categorical."}], "summary": {"passed": 5, "failed": 2, "total": 7, "pass_rate": 0.71}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "critical-thinking", "skill_path": "/sessions/festive-wonderful-albattani/mnt/outputs/critical-thinking", "executor_model": "claude-opus-4-6", "analyzer_model": "claude-opus-4-6", "timestamp": "2026-03-21T16:35:00Z", "evals_run": ["policy-tradeoff", "flawed-argument", "ethical-scenario"], "runs_per_configuration": 1}, "runs": [{"eval_id": 1, "eval_name": "Policy Tradeoff (PTO Decision)", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 43.3, "tokens": 69936, "tool_calls": 3, "errors": 0}, "expectations": [{"text": "Explicitly questions or reframes the user's original framing before diving into analysis", "passed": true, "evidence": "Opens by asking 'Are you trying to optimize for employee happiness, investor confidence, operational clarity, or something else?'"}, {"text": "Surfaces the counterintuitive insight that unlimited PTO often leads to employees taking LESS time off", "passed": true, "evidence": "States 'teams with unlimited PTO often take *less* vacation than those with a budget'"}, {"text": "Names at least 3 specific unstated assumptions held by either the engineers or the ops team", "passed": true, "evidence": "Dedicated 'Unpacking the Assumptions' section names 5+ assumptions across both groups"}, {"text": "Addresses what Series A investors actually care about", "passed": true, "evidence": "Dedicated section with 4 specific points on investor priorities"}, {"text": "Traces second-order implications (what happens at 40-50 employees)", "passed": true, "evidence": "Discusses scale from 12 to 40+ to 100 people"}, {"text": "Considers the fairness dimension \u2014 how each policy affects different types of employees unequally", "passed": true, "evidence": "Addresses how absence norms affect different people asymmetrically"}, {"text": "Provides a clear recommendation with reasoning", "passed": true, "evidence": "'Go with 25 days structured' with 6 numbered reasons and a pitch script"}]}, {"eval_id": 1, "eval_name": "Policy Tradeoff (PTO Decision)", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.71, "passed": 5, "failed": 2, "total": 7, "time_seconds": 28.3, "tokens": 65639, "tool_calls": 2, "errors": 0}, "expectations": [{"text": "Explicitly questions or reframes the user's original framing before diving into analysis", "passed": false, "evidence": "Proceeds directly into the two-option analysis without questioning the framing"}, {"text": "Surfaces the counterintuitive insight that unlimited PTO often leads to employees taking LESS time off", "passed": true, "evidence": "Notes implicit peer pressure dynamic"}, {"text": "Names at least 3 specific unstated assumptions held by either the engineers or the ops team", "passed": false, "evidence": "Lists motivations but doesn't frame them as challengeable assumptions"}, {"text": "Addresses what Series A investors actually care about", "passed": true, "evidence": "Identifies coherence and maturity as investor priorities"}, {"text": "Traces second-order implications (what happens at 40-50 employees)", "passed": true, "evidence": "Discusses scaling from 12 to 50 to 150"}, {"text": "Considers the fairness dimension \u2014 how each policy affects different types of employees unequally", "passed": true, "evidence": "Excellent coverage of senior vs junior, introverted vs extroverted, underrepresented groups"}, {"text": "Provides a clear recommendation with reasoning", "passed": true, "evidence": "Clear recommendation with implementation steps"}]}, {"eval_id": 2, "eval_name": "Flawed Argument (Rust Migration)", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 28.0, "tokens": 68850, "tool_calls": 3, "errors": 0}, "expectations": [{"text": "Names at least one specific logical fallacy or reasoning error by type", "passed": true, "evidence": "Explicitly names 'hasty generalization'"}, {"text": "Identifies the critical missing diagnostic step: profiling the application", "passed": true, "evidence": "Dedicated section on the missing profiling step"}, {"text": "Lists at least 3 specific unstated assumptions", "passed": true, "evidence": "4 numbered hidden assumptions with explanations"}, {"text": "Fairly acknowledges what the argument gets right before critiquing", "passed": true, "evidence": "Opens with 'What the Argument Gets Right' section"}, {"text": "Proposes concrete alternative approaches", "passed": true, "evidence": "5-step 'More Rigorous Approach' section"}, {"text": "Identifies conditions under which the argument WOULD become stronger", "passed": true, "evidence": "5 specific conditions that would strengthen the case"}, {"text": "Addresses human/organizational costs beyond technical considerations", "passed": true, "evidence": "Covers hiring, productivity, operational complexity, risk"}]}, {"eval_id": 2, "eval_name": "Flawed Argument (Rust Migration)", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.71, "passed": 5, "failed": 2, "total": 7, "time_seconds": 20.3, "tokens": 65157, "tool_calls": 2, "errors": 0}, "expectations": [{"text": "Names at least one specific logical fallacy or reasoning error by type", "passed": true, "evidence": "Names 'Conflates Correlation with Causation'"}, {"text": "Identifies the critical missing diagnostic step: profiling the application", "passed": true, "evidence": "Recommends profiling in the 'What Should Actually Happen' section"}, {"text": "Lists at least 3 specific unstated assumptions", "passed": false, "evidence": "Identifies logical problems but doesn't frame as unstated assumptions"}, {"text": "Fairly acknowledges what the argument gets right before critiquing", "passed": true, "evidence": "Opens with 'What's Reasonable in the Argument'"}, {"text": "Proposes concrete alternative approaches", "passed": true, "evidence": "4 numbered questions/steps in what should happen section"}, {"text": "Identifies conditions under which the argument WOULD become stronger", "passed": false, "evidence": "Brief mention of partial migration but no systematic conditions"}, {"text": "Addresses human/organizational costs beyond technical considerations", "passed": true, "evidence": "'Ignores Hidden Costs' section covers learning curve, hiring, opportunity cost"}]}, {"eval_id": 3, "eval_name": "Ethical Scenario (Manager Dilemma)", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 40.4, "tokens": 75197, "tool_calls": 7, "errors": 0}, "expectations": [{"text": "Identifies the tension as involving at least 3 distinct obligations or stakeholders", "passed": true, "evidence": "Names confidentiality promise, VP's legitimate need, and manager's own integrity as three distinct stakes"}, {"text": "Explicitly addresses what to do if the VP asks directly about this specific employee", "passed": true, "evidence": "Dedicated Step 3 with specific language"}, {"text": "Proposes a reframing strategy", "passed": true, "evidence": "Shifts from 'Who's at risk of leaving?' to 'Who's set up to succeed?'"}, {"text": "Recommends having a separate conversation with the employee", "passed": true, "evidence": "Step 4 with specific dialogue"}, {"text": "Considers implications for all major parties", "passed": true, "evidence": "'Why This Works' section traces implications for employee, VP, manager, and project"}, {"text": "Provides specific language or conversational scripts", "passed": true, "evidence": "Multiple scripts across Steps 1-4"}, {"text": "Resists oversimplifying \u2014 preserves genuine complexity", "passed": true, "evidence": "Multi-step approach with 'What Not to Do' boundaries plus nuanced closing"}]}, {"eval_id": 3, "eval_name": "Ethical Scenario (Manager Dilemma)", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.71, "passed": 5, "failed": 2, "total": 7, "time_seconds": 16.0, "tokens": 64738, "tool_calls": 2, "errors": 0}, "expectations": [{"text": "Identifies the tension as involving at least 3 distinct obligations or stakeholders", "passed": false, "evidence": "Stays mostly binary: employee trust vs business need. Manager integrity mentioned but not as a distinct stake."}, {"text": "Explicitly addresses what to do if the VP asks directly about this specific employee", "passed": true, "evidence": "Provides VP response language"}, {"text": "Proposes a reframing strategy", "passed": true, "evidence": "Reframes around capability and availability"}, {"text": "Recommends having a separate conversation with the employee", "passed": true, "evidence": "Dedicated section with dialogue"}, {"text": "Considers implications for all major parties", "passed": false, "evidence": "Covers employee and manager well; VP briefly. Does not trace project implications."}, {"text": "Provides specific language or conversational scripts", "passed": true, "evidence": "Scripts for both VP and employee conversations"}, {"text": "Resists oversimplifying \u2014 preserves genuine complexity", "passed": true, "evidence": "Multi-step approach though slightly more categorical in places"}]}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 37.2, "stddev": 6.5, "min": 28.0, "max": 43.3}, "tokens": {"mean": 71328, "stddev": 2228, "min": 68850, "max": 75197}}, "without_skill": {"pass_rate": {"mean": 0.71, "stddev": 0.0, "min": 0.71, "max": 0.71}, "time_seconds": {"mean": 21.5, "stddev": 5.0, "min": 16.0, "max": 28.3}, "tokens": {"mean": 65178, "stddev": 366, "min": 64738, "max": 65639}}, "delta": {"pass_rate": "+0.29", "time_seconds": "+15.7", "tokens": "+6150"}}, "notes": ["With-skill achieves 100% pass rate across all 3 evals (21/21 assertions) vs 71% without skill (15/21)", "The 6 assertions that consistently fail without the skill cluster around two reasoning patterns: (1) explicitly surfacing and labeling assumptions as assumptions rather than just listing preferences/motivations, and (2) tracing implications comprehensively across all stakeholders rather than focusing on the 2 most obvious ones", "4 assertions pass 100% in both configurations and may not discriminate skill value: acknowledging argument strengths before critique, providing recommendations, proposing alternatives, and providing conversational scripts. The model handles these well regardless of the skill.", "With-skill runs use ~9% more tokens on average (71K vs 65K) and take ~73% longer (37s vs 22s), primarily due to reading the skill files and reference docs", "The ethical scenario shows the largest time differential (40s vs 16s, 2.5x) \u2014 the with-skill agent read both the SKILL.md and the full wheel-of-reason reference, which may explain the more comprehensive stakeholder analysis", "The most discriminating assertions across all evals involve explicitly reframing questions before answering and naming conditions under which opposing arguments would become stronger \u2014 these seem to be behaviors the skill specifically elicits"]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>
