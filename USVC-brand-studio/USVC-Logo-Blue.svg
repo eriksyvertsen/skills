@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <title>USVC Logo — Blue on Transparent</title>
+  <style>
+    .logo-text { font-family: 'Sohne', 'Inter', 'Helvetica Neue', Arial, sans-serif; font-weight: 800; font-size: 96px; letter-spacing: -0.03em; fill: #0D84FF; }
+  </style>
+  <text x="10" y="92" class="logo-text">USVC</text>
+</svg>

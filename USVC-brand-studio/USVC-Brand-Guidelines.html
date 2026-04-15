@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USVC Brand Design Guidelines</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Primary Colors */
+            --primary-navy: #00172E;
+            --off-white: #FAFDFF;
+            --primary-blue: #0D84FF;
+
+            /* Navy Spectrum */
+            --deep-navy: #122A43;
+            --mid-navy: #002B57;
+            --medium-blue: #143D8D;
+
+            /* Blue Spectrum */
+            --active-blue: #1C73E8;
+            --link-blue: #0E72DA;
+            --light-blue: #B2D5FF;
+            --ice-blue: #EFF9FE;
+            --cloud-blue: #F0F7FF;
+            --pale-blue: #EDF6FF;
+
+            /* Neutrals */
+            --light-gray: #F2F3F9;
+            --warm-gray: #EFF2F4;
+            --text-dark: #243D58;
+            --text-medium: #597597;
+            --text-muted: #798594;
+
+            /* Accents */
+            --accent-red: #FF6265;
+            --accent-green: #62BF59;
+
+            /* Border */
+            --page-border: #FFE8E0;
+
+            /* Typography */
+            --font-serif: 'DM Serif Display', 'Playfair Display', serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            /* Spacing Scale */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            --space-2xl: 4.5rem;
+            --space-3xl: 7.2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--off-white);
+            letter-spacing: -0.03em;
+        }
+
+        .page-container {
+            border: 2px solid var(--page-border);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+        }
+
+        /* ===== SIDEBAR NAVIGATION ===== */
+        .sidebar {
+            background: var(--primary-navy);
+            color: var(--off-white);
+            padding: var(--space-lg) var(--space-md);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-sans);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .sidebar nav a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(13, 132, 255, 0.2);
+            color: var(--primary-blue);
+        }
+
+        .sidebar nav a.active {
+            background: var(--primary-blue);
+            color: var(--off-white);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            padding: 0;
+        }
+
+        section {
+            padding: var(--space-3xl) 6rem;
+            border-bottom: 1px solid var(--warm-gray);
+        }
+
+        section:nth-child(odd) {
+            background: var(--off-white);
+        }
+
+        section:nth-child(even) {
+            background: var(--ice-blue);
+        }
+
+        section.hero {
+            background: var(--primary-navy);
+            color: var(--off-white);
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding: var(--space-3xl) 6rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        section.dark {
+            background: var(--primary-navy);
+            color: var(--off-white);
+        }
+
+        section.light {
+            background: var(--off-white);
+            color: var(--text-dark);
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-lg);
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -0.015em;
+            margin-bottom: var(--space-lg);
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin-bottom: var(--space-md);
+        }
+
+        h4 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.005em;
+            margin-bottom: var(--space-md);
+        }
+
+        h5 {
+            font-family: var(--font-sans);
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+            color: var(--text-medium);
+        }
+
+        h6 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-sm);
+        }
+
+        p {
+            margin-bottom: var(--space-lg);
+            line-height: 1.7;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-xl);
+            font-weight: 400;
+        }
+
+        .hero .tagline {
+            color: var(--light-blue);
+        }
+
+        /* ===== BUTTONS ===== */
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            border: 0;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: none;
+            letter-spacing: -0.03em;
+        }
+
+        .button-primary {
+            background: var(--primary-navy);
+            color: var(--off-white);
+        }
+
+        .button-primary:hover {
+            background: var(--mid-navy);
+        }
+
+        .button-blue {
+            background: var(--primary-blue);
+            color: var(--off-white);
+        }
+
+        .button-blue:hover {
+            background: var(--active-blue);
+        }
+
+        .button-ghost {
+            background: transparent;
+            border: 2px solid var(--primary-navy);
+            color: var(--primary-navy);
+        }
+
+        .button-ghost:hover {
+            background: var(--primary-navy);
+            color: var(--off-white);
+        }
+
+        .button-ghost-light {
+            background: transparent;
+            border: 2px solid var(--off-white);
+            color: var(--off-white);
+        }
+
+        .button-ghost-light:hover {
+            background: var(--off-white);
+            color: var(--primary-navy);
+        }
+
+        .button-small {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .button-large {
+            padding: 1.25rem 3rem;
+            font-size: 1.125rem;
+        }
+
+        /* ===== GRID & LAYOUT ===== */
+        .grid {
+            display: grid;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* ===== COLOR SWATCHES ===== */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .color-swatch {
+            border-radius: 0;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-sample {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+        }
+
+        .color-info {
+            padding: var(--space-md);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .color-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--text-dark);
+        }
+
+        .color-value {
+            font-family: 'Courier New', monospace;
+            color: var(--text-medium);
+            margin-bottom: var(--space-xs);
+        }
+
+        .color-usage {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* ===== TYPE SPECIMEN ===== */
+        .type-specimen {
+            margin: var(--space-xl) 0;
+        }
+
+        .type-example {
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--warm-gray);
+        }
+
+        .type-label {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .type-specs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+            padding: var(--space-md);
+            background: var(--light-gray);
+            font-size: 0.875rem;
+            color: var(--text-medium);
+        }
+
+        .type-spec-item {
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: 0;
+            padding: var(--space-lg);
+            border: 1px solid var(--warm-gray);
+        }
+
+        .card-dark {
+            background: var(--deep-navy);
+            color: var(--off-white);
+            border: none;
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        /* ===== COMPONENT SHOWCASE ===== */
+        .component-showcase {
+            background: var(--light-gray);
+            padding: var(--space-xl);
+            margin: var(--space-xl) 0;
+            border-radius: 0;
+        }
+
+        .component-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .component-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== LOGO SPECS ===== */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .logo-item {
+            padding: var(--space-xl);
+            background: white;
+            border-radius: 0;
+            border: 1px solid var(--warm-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .logo-item-dark {
+            background: var(--primary-navy);
+        }
+
+        .logo-svg {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-xl) 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            text-align: left;
+            padding: var(--space-md);
+            border-bottom: 2px solid var(--primary-navy);
+            font-weight: 600;
+            background: var(--light-gray);
+            font-family: var(--font-sans);
+        }
+
+        td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--warm-gray);
+            font-family: 'Courier New', monospace;
+        }
+
+        tr:hover {
+            background: var(--pale-blue);
+        }
+
+        /* ===== CODE BLOCKS ===== */
+        code {
+            font-family: 'Courier New', monospace;
+            background: var(--light-gray);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        pre {
+            background: var(--primary-navy);
+            color: var(--off-white);
+            padding: var(--space-lg);
+            overflow-x: auto;
+            margin: var(--space-xl) 0;
+            font-family: 'Courier New', monospace;
+            border-radius: 0;
+        }
+
+        pre code {
+            background: none;
+            color: var(--off-white);
+            padding: 0;
+        }
+
+        /* ===== UTILITIES ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-intro {
+            max-width: 700px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .highlight {
+            background: var(--light-blue);
+            color: var(--primary-navy);
+            padding: 0.25rem 0.5rem;
+        }
+
+        .divider {
+            height: 2px;
+            background: var(--warm-gray);
+            margin: var(--space-2xl) 0;
+        }
+
+        .note {
+            background: var(--pale-blue);
+            border-left: 4px solid var(--primary-blue);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+            border-radius: 0;
+        }
+
+        .note h6 {
+            margin-top: 0;
+        }
+
+        .do-dont-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .do, .dont {
+            padding: var(--space-lg);
+            border-radius: 0;
+        }
+
+        .do {
+            background: #E8F5E9;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .dont {
+            background: #FFEBEE;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .do h5, .dont h5 {
+            margin-top: 0;
+        }
+
+        .do h5::before {
+            content: '✓ ';
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .dont h5::before {
+            content: '✗ ';
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                height: auto;
+                position: relative;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            section {
+                padding: var(--space-2xl) 3rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .type-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                border: none;
+            }
+
+            section {
+                padding: var(--space-xl) 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .do-dont-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .color-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .type-specs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            .page-container {
+                display: block;
+                border: none;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+                padding: 2rem;
+                border: none;
+            }
+
+            .component-showcase {
+                break-inside: avoid;
+            }
+        }
+
+        /* ===== DARK MODE PREVIEW ===== */
+        .dark-preview {
+            background: var(--primary-navy);
+            color: var(--off-white);
+            padding: var(--space-xl);
+            border-radius: 0;
+            margin: var(--space-xl) 0;
+        }
+
+        .dark-preview h4,
+        .dark-preview h5 {
+            color: var(--light-blue);
+        }
+
+        .dark-preview .type-example {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== SPACING SCALE VISUAL ===== */
+        .spacing-visual {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: flex-end;
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+
+        .spacing-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spacing-box {
+            background: var(--primary-blue);
+            border-radius: 0;
+        }
+
+        .spacing-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- ===== SIDEBAR NAVIGATION ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">USVC</div>
+            <nav>
+                <ul>
+                    <li><a href="#hero" class="nav-link active">Cover</a></li>
+                    <li><a href="#overview" class="nav-link">Brand Overview</a></li>
+                    <li><a href="#logo" class="nav-link">Logo</a></li>
+                    <li><a href="#colors" class="nav-link">Color Palette</a></li>
+                    <li><a href="#typography" class="nav-link">Typography</a></li>
+                    <li><a href="#spacing" class="nav-link">Spacing & Layout</a></li>
+                    <li><a href="#buttons" class="nav-link">Buttons & Controls</a></li>
+                    <li><a href="#components" class="nav-link">Components</a></li>
+                    <li><a href="#imagery" class="nav-link">Photography</a></li>
+                    <li><a href="#voice" class="nav-link">Voice & Tone</a></li>
+                    <li><a href="#applications" class="nav-link">Applications</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="main-content">
+            <!-- COVER -->
+            <section id="hero" class="hero">
+                <div>
+                    <svg class="logo-svg" style="width: 120px; margin-bottom: 2rem;" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                        <text x="20" y="90" font-family="Arial, sans-serif" font-size="80" font-weight="700" fill="#FAFDFF" letter-spacing="-8">USVC</text>
+                    </svg>
+                    <h1>USVC Brand<br>Design Guidelines</h1>
+                    <p class="tagline">Back the companies building the future. Before it's obvious.</p>
+                    <p style="font-size: 1.1rem; margin-bottom: var(--space-xl);">A comprehensive brand system designed for US Venture Capital—a fund by AngelList Asset Management that broadens access to venture capital for retail investors.</p>
+                    <button class="button button-ghost-light button-large">Download Assets</button>
+                </div>
+            </section>
+
+            <!-- BRAND OVERVIEW -->
+            <section id="overview" class="light">
+                <h2>Brand Overview</h2>
+                <div class="section-intro">
+                    <p>USVC represents a fundamental shift in venture capital access. We're not just offering exposure to venture—we're democratizing early-stage investment for retail investors who believe in backing the future.</p>
+                </div>
+
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h4>Mission</h4>
+                        <p>Broaden access to venture capital and empower everyday investors to participate in the companies building tomorrow's world.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Positioning</h4>
+                        <p>Institutional-grade venture investing, made accessible. We combine financial credibility with modern, tech-forward design to challenge VC exclusivity.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Tone of Voice</h4>
+                        <p><strong>Direct</strong> — we say what we mean. <strong>Authoritative</strong> — we know venture. <strong>Accessible</strong> — we explain complex concepts simply. <strong>Contrarian</strong> — we question the status quo.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-3xl);">Visual Identity Principles</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <h5>Sharp Corners Everywhere</h5>
+                        <p>0px border-radius on buttons, cards, inputs. This is not accidental—it's a defining visual characteristic that conveys precision and institutional rigor.</p>
+                    </div>
+                    <div>
+                        <h5>Generous Whitespace</h5>
+                        <p>Vertical padding between sections reaches 7.2rem. Wide container padding breathes. Whitespace is not emptiness—it's clarity.</p>
+                    </div>
+                    <div>
+                        <h5>Serif & Sans Pairing</h5>
+                        <p>Romie (serif) for display establishes financial authority. Sohne (sans-serif) for UI conveys modern, tech-forward efficiency. Together they speak trust and innovation.</p>
+                    </div>
+                    <div>
+                        <h5>Minimal Decoration</h5>
+                        <p>No gradients on UI elements. No drop shadows. No unnecessary ornamentation. Clean line work and deliberate color create sophistication without clutter.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOGO -->
+            <section id="logo" class="dark">
+                <h2>Logo & Wordmark</h2>
+                <div class="section-intro">
+                    <p>The USVC wordmark is set in a heavy sans-serif (Sohne), all caps, with tight negative letter-spacing. The logo should feel condensed, modern, and unmistakably institutional.</p>
+                </div>
+
+                <div class="logo-grid">
+                    <div class="logo-item logo-item-dark">
+                        <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+                            <text x="20" y="90" font-family="Arial, sans-serif" font-size="80" font-weight="700" fill="#FAFDFF" letter-spacing="-8">USVC</text>
+                        </svg>
+                    </div>
+                    <div class="logo-item">
+                        <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+                            <text x="20" y="90" font-family="Arial, sans-serif" font-size="80" font-weight="700" fill="#00172E" letter-spacing="-8">USVC</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <h3>Logo Specifications</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Specification</th>
+                            <th>Value</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Font Family</td>
+                            <td>Sohne Bold</td>
+                            <td>Commercial font. Use Inter Bold as fallback in web.</td>
+                        </tr>
+                        <tr>
+                            <td>Letter Spacing</td>
+                            <td>-8% (tight)</td>
+                            <td>Compressed feel creates premium, condensed appearance.</td>
+                        </tr>
+                        <tr>
+                            <td>Primary Color</td>
+                            <td>#00172E (Navy)</td>
+                            <td>Default dark logo on light backgrounds.</td>
+                        </tr>
+                        <tr>
+                            <td>Secondary Color</td>
+                            <td>#FAFDFF (Off-White)</td>
+                            <td>Inverse version for dark backgrounds.</td>
+                        </tr>
+                        <tr>
+                            <td>Minimum Size</td>
+                            <td>120px width</td>
+                            <td>Below this size, legibility suffers. Never use below 80px.</td>
+                        </tr>
+                        <tr>
+                            <td>Clear Space</td>
+                            <td>1/3 of logo height</td>
+                            <td>Maintain minimum clear space on all sides.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: var(--space-2xl);">Logo Do's & Don'ts</h3>
+                <div class="do-dont-grid">
+                    <div class="do">
+                        <h5>Use Black or Navy</h5>
+                        <p>Navy (#00172E) on light backgrounds, Off-White (#FAFDFF) on dark backgrounds. Maintain high contrast.</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Don't Use Colors</h5>
+                        <p>The logo should never be rendered in brand blue or other accent colors. Monochrome only.</p>
+                    </div>
+                    <div class="do">
+                        <h5>Maintain Clear Space</h5>
+                        <p>Always provide breathing room around the logo. Use at least 1/3 of the logo height as clear space.</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Don't Distort</h5>
+                        <p>Never stretch, skew, or rotate the logo. Don't add shadows, outlines, or effects.</p>
+                    </div>
+                    <div class="do">
+                        <h5>Honor Tight Letter-Spacing</h5>
+                        <p>The compressed letter-spacing is integral to the brand. Never expand or adjust the spacing.</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Don't Separate Letters</h5>
+                        <p>The logo must always appear as a unified wordmark. Never break it into individual letters or rearrange them.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLOR PALETTE -->
+            <section id="colors" class="light">
+                <h2>Color Palette</h2>
+                <div class="section-intro">
+                    <p>The USVC color system balances institutional authority with modern accessibility. Primary navy establishes trust; bright blue drives engagement. The full spectrum supports data visualization, states, and progressive disclosure.</p>
+                </div>
+
+                <h3>Primary Colors</h3>
+                <div class="color-grid">
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #00172E; color: white;">Navy</div>
+                        <div class="color-info">
+                            <div class="color-name">Primary Navy</div>
+                            <div class="color-value">HEX: #00172E</div>
+                            <div class="color-value">RGB: 0, 23, 46</div>
+                            <div class="color-usage">Logo, primary buttons, dark sections</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #FAFDFF; color: #00172E;">Off-White</div>
+                        <div class="color-info">
+                            <div class="color-name">Off-White / Snow</div>
+                            <div class="color-value">HEX: #FAFDFF</div>
+                            <div class="color-value">RGB: 250, 253, 255</div>
+                            <div class="color-usage">Primary background, text on dark</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #0D84FF; color: white;">Blue</div>
+                        <div class="color-info">
+                            <div class="color-name">Primary Blue</div>
+                            <div class="color-value">HEX: #0D84FF</div>
+                            <div class="color-value">RGB: 13, 132, 255</div>
+                            <div class="color-usage">Accent CTAs, links, interactive highlights</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Navy Spectrum</h3>
+                <div class="color-grid">
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #122A43; color: white;">Deep Navy</div>
+                        <div class="color-info">
+                            <div class="color-name">Deep Navy</div>
+                            <div class="color-value">HEX: #122A43</div>
+                            <div class="color-value">RGB: 18, 42, 67</div>
+                            <div class="color-usage">Secondary dark backgrounds, card backgrounds</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #002B57; color: white;">Mid Navy</div>
+                        <div class="color-info">
+                            <div class="color-name">Mid Navy</div>
+                            <div class="color-value">HEX: #002B57</div>
+                            <div class="color-value">RGB: 0, 43, 87</div>
+                            <div class="color-usage">Dark section variants, hover states</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #143D8D; color: white;">Medium Blue</div>
+                        <div class="color-info">
+                            <div class="color-name">Medium Blue</div>
+                            <div class="color-value">HEX: #143D8D</div>
+                            <div class="color-value">RGB: 20, 61, 141</div>
+                            <div class="color-usage">Gradients, data visualization</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Blue Spectrum</h3>
+                <div class="color-grid">
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #1C73E8; color: white;">Active</div>
+                        <div class="color-info">
+                            <div class="color-name">Active Blue</div>
+                            <div class="color-value">HEX: #1C73E8</div>
+                            <div class="color-value">RGB: 28, 115, 232</div>
+                            <div class="color-usage">Hover states, interactive elements</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #0E72DA; color: white;">Link</div>
+                        <div class="color-info">
+                            <div class="color-name">Link Blue</div>
+                            <div class="color-value">HEX: #0E72DA</div>
+                            <div class="color-value">RGB: 14, 114, 218</div>
+                            <div class="color-usage">Inline links, secondary actions</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #B2D5FF; color: #00172E;">Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Light Blue</div>
+                            <div class="color-value">HEX: #B2D5FF</div>
+                            <div class="color-value">RGB: 178, 213, 255</div>
+                            <div class="color-usage">Subtle highlights, badge backgrounds</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #EFF9FE; color: #00172E;">Ice</div>
+                        <div class="color-info">
+                            <div class="color-name">Ice Blue</div>
+                            <div class="color-value">HEX: #EFF9FE</div>
+                            <div class="color-value">RGB: 239, 249, 254</div>
+                            <div class="color-usage">Section backgrounds, subtle tints</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #F0F7FF; color: #00172E;">Cloud</div>
+                        <div class="color-info">
+                            <div class="color-name">Cloud Blue</div>
+                            <div class="color-value">HEX: #F0F7FF</div>
+                            <div class="color-value">RGB: 240, 247, 255</div>
+                            <div class="color-usage">Alternate light backgrounds</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #EDF6FF; color: #00172E;">Pale</div>
+                        <div class="color-info">
+                            <div class="color-name">Pale Blue</div>
+                            <div class="color-value">HEX: #EDF6FF</div>
+                            <div class="color-value">RGB: 237, 246, 255</div>
+                            <div class="color-usage">Hover backgrounds, focus states</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Neutrals</h3>
+                <div class="color-grid">
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #F2F3F9; color: #00172E;">Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Light Gray</div>
+                            <div class="color-value">HEX: #F2F3F9</div>
+                            <div class="color-value">RGB: 242, 243, 249</div>
+                            <div class="color-usage">Card backgrounds, dividers</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #EFF2F4; color: #00172E;">Warm</div>
+                        <div class="color-info">
+                            <div class="color-name">Warm Gray</div>
+                            <div class="color-value">HEX: #EFF2F4</div>
+                            <div class="color-value">RGB: 239, 242, 244</div>
+                            <div class="color-usage">Borders, subtle separators</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #243D58; color: white;">Dark</div>
+                        <div class="color-info">
+                            <div class="color-name">Text Dark</div>
+                            <div class="color-value">HEX: #243D58</div>
+                            <div class="color-value">RGB: 36, 61, 88</div>
+                            <div class="color-usage">Secondary body text</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #597597; color: white;">Medium</div>
+                        <div class="color-info">
+                            <div class="color-name">Text Medium</div>
+                            <div class="color-value">HEX: #597597</div>
+                            <div class="color-value">RGB: 89, 117, 151</div>
+                            <div class="color-usage">Tertiary text, captions</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #798594; color: white;">Muted</div>
+                        <div class="color-info">
+                            <div class="color-name">Text Muted</div>
+                            <div class="color-value">HEX: #798594</div>
+                            <div class="color-value">RGB: 121, 133, 148</div>
+                            <div class="color-usage">Placeholder text, disabled states</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Accent Colors</h3>
+                <div class="color-grid">
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #FF6265; color: white;">Red</div>
+                        <div class="color-info">
+                            <div class="color-name">Accent Red</div>
+                            <div class="color-value">HEX: #FF6265</div>
+                            <div class="color-value">RGB: 255, 98, 101</div>
+                            <div class="color-usage">Negative indicators, warnings</div>
+                        </div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-sample" style="background-color: #62BF59; color: white;">Green</div>
+                        <div class="color-info">
+                            <div class="color-name">Accent Green</div>
+                            <div class="color-value">HEX: #62BF59</div>
+                            <div class="color-value">RGB: 98, 191, 89</div>
+                            <div class="color-usage">Positive indicators, success states</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TYPOGRAPHY -->
+            <section id="typography" class="light">
+                <h2>Typography</h2>
+                <div class="section-intro">
+                    <p>The USVC typographic system pairs a distinctive serif for display with a modern sans-serif for UI and body text. This combination balances institutional authority with contemporary accessibility.</p>
+                </div>
+
+                <h3>Font Families</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <h4 style="font-family: var(--font-serif); margin-top: 0;">Display & Headings</h4>
+                        <p><strong>Primary:</strong> Romie (serif)</p>
+                        <p><strong>Fallback:</strong> DM Serif Display, Playfair Display</p>
+                        <p><strong>Weight:</strong> 500</p>
+                        <p><strong>Letter-spacing:</strong> -3% on large (H1-H2), -1.5% on smaller (H3-H4)</p>
+                        <p style="margin-top: var(--space-xl);">Romie's distinctive proportions and serifs communicate premium positioning and financial credibility. The tight negative letter-spacing creates a compressed, confident voice.</p>
+                    </div>
+                    <div>
+                        <h4 style="font-family: var(--font-sans); margin-top: 0;">Body & UI Text</h4>
+                        <p><strong>Primary:</strong> Sohne (sans-serif)</p>
+                        <p><strong>Fallback:</strong> Inter</p>
+                        <p><strong>Weight:</strong> 400 (body), 500-700 (emphasis)</p>
+                        <p><strong>Letter-spacing:</strong> -0.03em</p>
+                        <p style="margin-top: var(--space-xl);">Sohne's geometric precision and open letterforms ensure clarity at all sizes. Slight negative letter-spacing improves flow without sacrificing readability.</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <h3>Type Hierarchy</h3>
+                <div class="type-specimen">
+                    <div class="type-example">
+                        <div class="type-label">Display Large — H1</div>
+                        <h1 style="margin-bottom: var(--space-sm);">Back the companies building the future</h1>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 4rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 500</div>
+                            <div class="type-spec-item"><strong>Line:</strong> 1.2</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> -3%</div>
+                        </div>
+                    </div>
+
+                    <div class="type-example">
+                        <div class="type-label">Display Medium — H2</div>
+                        <h2 style="margin-bottom: var(--space-sm);">Brand Identity & Visual Language</h2>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 2.5rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 500</div>
+                            <div class="type-spec-item"><strong>Line:</strong> 1.3</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> -1.5%</div>
+                        </div>
+                    </div>
+
+                    <div class="type-example">
+                        <div class="type-label">Display Small — H3</div>
+                        <h3 style="margin-bottom: var(--space-sm);">Color Palette & Design Tokens</h3>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 2rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 500</div>
+                            <div class="type-spec-item"><strong>Line:</strong> 1.4</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> -1%</div>
+                        </div>
+                    </div>
+
+                    <div class="type-example">
+                        <div class="type-label">Heading Large — H4</div>
+                        <h4 style="margin-bottom: var(--space-sm);">Button Styles & Interactive States</h4>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 1.5rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 500</div>
+                            <div class="type-spec-item"><strong>Line:</strong> 1.5</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> -0.5%</div>
+                        </div>
+                    </div>
+
+                    <div class="type-example">
+                        <div class="type-label">Label Large — H5</div>
+                        <h5 style="margin-bottom: var(--space-sm);">Core Design Principles</h5>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 1.125rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 600</div>
+                            <div class="type-spec-item"><strong>Transform:</strong> Uppercase</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> 0.05em</div>
+                        </div>
+                    </div>
+
+                    <div class="type-example">
+                        <div class="type-label">Body Regular</div>
+                        <p style="margin-bottom: var(--space-sm);">USVC democratizes venture capital access, enabling retail investors to participate in early-stage funding opportunities alongside institutional capital. Our straightforward approach to fund structure and transparent fee model challenges traditional VC gatekeeping.</p>
+                        <div class="type-specs">
+                            <div class="type-spec-item"><strong>Size:</strong> 1rem</div>
+                            <div class="type-spec-item"><strong>Weight:</strong> 400</div>
+                            <div class="type-spec-item"><strong>Line:</strong> 1.7</div>
+                            <div class="type-spec-item"><strong>Spacing:</strong> -0.03em</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SPACING & LAYOUT -->
+            <section id="spacing" class="light">
+                <h2>Spacing & Layout</h2>
+                <div class="section-intro">
+                    <p>Generous whitespace is fundamental to USVC's visual language. Our spacing scale creates rhythm and hierarchy, making content feel premium and breathing room intentional.</p>
+                </div>
+
+                <h3>Spacing Scale</h3>
+                <div class="spacing-visual">
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 20px; height: 20px;"></div>
+                        <div class="spacing-label">XS: 0.5rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 40px; height: 40px;"></div>
+                        <div class="spacing-label">SM: 1rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 60px; height: 60px;"></div>
+                        <div class="spacing-label">MD: 1.5rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 80px; height: 80px;"></div>
+                        <div class="spacing-label">LG: 2rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 120px; height: 120px;"></div>
+                        <div class="spacing-label">XL: 3rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 180px; height: 180px;"></div>
+                        <div class="spacing-label">2XL: 4.5rem</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-box" style="width: 200px; height: 200px;"></div>
+                        <div class="spacing-label">3XL: 7.2rem</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Layout Guidelines</h3>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4>Container Width</h4>
+                        <p><strong>Max-width:</strong> 1200px</p>
+                        <p><strong>Padding:</strong> 6rem horizontal on desktop, 3rem on tablet, 1.5rem on mobile</p>
+                        <p>Content feels spacious without becoming difficult to scan. Optimal line length (55-75 characters) is maintained for readability.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Section Padding</h4>
+                        <p><strong>Vertical:</strong> 7.2rem (3XL) between major sections</p>
+                        <p><strong>Internal:</strong> 3rem (XL) between component groups</p>
+                        <p>Alternating background colors create visual rhythm and section delineation.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Component Spacing</h4>
+                        <p><strong>Between elements:</strong> 1.5rem - 3rem</p>
+                        <p><strong>Button groups:</strong> 1rem gap</p>
+                        <p><strong>Card padding:</strong> 2rem internal padding</p>
+                        <p>Consistent spacing creates visual cohesion and predictable interaction patterns.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Grid System</h4>
+                        <p><strong>Columns:</strong> Responsive (2-4 on desktop, 1-2 on tablet, 1 on mobile)</p>
+                        <p><strong>Gap:</strong> 3rem (XL)</p>
+                        <p>Auto-fit grid columns prevent awkward layouts at various breakpoints.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUTTONS & INTERACTIVE ELEMENTS -->
+            <section id="buttons" class="light">
+                <h2>Buttons & Interactive Elements</h2>
+                <div class="section-intro">
+                    <p>Buttons are primary interaction points. The USVC button system is intentional, consistent, and immediately recognizable across all applications.</p>
+                </div>
+
+                <h3>Button Variants</h3>
+                <div class="component-showcase">
+                    <h4 style="margin-top: 0;">Primary Button</h4>
+                    <p style="color: var(--text-medium); margin-bottom: var(--space-lg);">Navy background, off-white text. Used for primary CTAs and main actions.</p>
+                    <div class="component-row" style="margin-bottom: var(--space-2xl);">
+                        <button class="button button-primary">Default State</button>
+                        <button class="button button-primary" style="opacity: 0.6;">Disabled State</button>
+                        <button class="button button-primary button-small">Small</button>
+                        <button class="button button-primary button-large">Large</button>
+                    </div>
+
+                    <h4>Blue CTA Button</h4>
+                    <p style="color: var(--text-medium); margin-bottom: var(--space-lg);">Bright blue background. Used for secondary actions, links, and interactive emphasis.</p>
+                    <div class="component-row" style="margin-bottom: var(--space-2xl);">
+                        <button class="button button-blue">Default State</button>
+                        <button class="button button-blue" style="opacity: 0.6;">Disabled State</button>
+                        <button class="button button-blue button-small">Small</button>
+                        <button class="button button-blue button-large">Large</button>
+                    </div>
+
+                    <h4>Ghost Button</h4>
+                    <p style="color: var(--text-medium); margin-bottom: var(--space-lg);">Transparent background with navy border. Used for secondary actions on light backgrounds.</p>
+                    <div class="component-row">
+                        <button class="button button-ghost">Default State</button>
+                        <button class="button button-ghost" style="opacity: 0.6;">Disabled State</button>
+                        <button class="button button-ghost button-small">Small</button>
+                        <button class="button button-ghost button-large">Large</button>
+                    </div>
+                </div>
+
+                <div class="note">
+                    <h6>Button Key Specifications</h6>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li><strong>Border Radius:</strong> 0px (sharp corners)</li>
+                        <li><strong>Font Family:</strong> Sohne (Inter fallback)</li>
+                        <li><strong>Font Weight:</strong> 500</li>
+                        <li><strong>Padding:</strong> 1rem 2rem (standard), adjust for size variants</li>
+                        <li><strong>Transition:</strong> 0.3s all ease</li>
+                        <li><strong>Text Transform:</strong> None (maintain original case)</li>
+                        <li><strong>Letter Spacing:</strong> -0.03em</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Interactive States</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Style</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Default</td>
+                            <td>As specified in variant</td>
+                            <td>Initial button appearance</td>
+                        </tr>
+                        <tr>
+                            <td>Hover</td>
+                            <td>Darken background by 1-2 shades, maintain border</td>
+                            <td>User indicates intent to interact</td>
+                        </tr>
+                        <tr>
+                            <td>Active / Pressed</td>
+                            <td>Darker background, no outline change</td>
+                            <td>Button is being clicked/held</td>
+                        </tr>
+                        <tr>
+                            <td>Focus (Keyboard)</td>
+                            <td>2px outline in primary blue</td>
+                            <td>Keyboard navigation accessibility</td>
+                        </tr>
+                        <tr>
+                            <td>Disabled</td>
+                            <td>40-60% opacity, cursor: not-allowed</td>
+                            <td>Action unavailable in current context</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: var(--space-2xl);">Input Fields</h3>
+                <div class="component-showcase">
+                    <p style="color: var(--text-medium); margin-bottom: var(--space-lg);">Input fields follow the same design language: sharp corners, navy borders on focus, generous padding.</p>
+                    <div style="margin-bottom: var(--space-xl);">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email Address</label>
+                        <input type="email" placeholder="your@email.com" style="width: 100%; max-width: 400px; padding: 1rem; border: 2px solid var(--warm-gray); border-radius: 0; font-family: var(--font-sans); font-size: 1rem; letter-spacing: -0.03em;" />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Full Name</label>
+                        <input type="text" placeholder="Jane Smith" style="width: 100%; max-width: 400px; padding: 1rem; border: 2px solid var(--warm-gray); border-radius: 0; font-family: var(--font-sans); font-size: 1rem; letter-spacing: -0.03em;" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPONENTS -->
+            <section id="components" class="light">
+                <h2>Components & Patterns</h2>
+                <div class="section-intro">
+                    <p>Reusable components build consistency and speed. Every component in the USVC system maintains sharp corners, clean spacing, and the navy/blue/white color foundation.</p>
+                </div>
+
+                <h3>Card Components</h3>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h4>Card: Default</h4>
+                        <p>Light gray background, subtle border. Used for content grouping, testimonials, and feature highlights.</p>
+                        <button class="button button-primary button-small" style="margin-top: var(--space-md);">Learn More</button>
+                    </div>
+                    <div class="card">
+                        <h4>Card: Feature</h4>
+                        <p>White background with navy heading. Used for prominent features and value propositions.</p>
+                        <button class="button button-primary button-small" style="margin-top: var(--space-md);">Explore</button>
+                    </div>
+                    <div class="card card-dark">
+                        <h4>Card: Dark</h4>
+                        <p>Deep navy background, light text. Used for contrast sections and secondary information.</p>
+                        <button class="button button-ghost-light button-small" style="margin-top: var(--space-md);">Discover</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Data Table Pattern</h3>
+                <p style="color: var(--text-medium); margin-bottom: var(--space-lg);">Tables use navy headers, light gray alternate rows, and sharp borders. Ideal for fund data, fee comparisons, or term sheets.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fund Name</th>
+                            <th>Min Investment</th>
+                            <th>Management Fee</th>
+                            <th>Carry</th>
+                            <th>Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>USVC Fund I</td>
+                            <td>$1,000</td>
+                            <td>1.5%</td>
+                            <td>15%</td>
+                            <td>10 years</td>
+                        </tr>
+                        <tr>
+                            <td>USVC Fund II</td>
+                            <td>$500</td>
+                            <td>1.25%</td>
+                            <td>20%</td>
+                            <td>10 years</td>
+                        </tr>
+                        <tr>
+                            <td>USVC Fund III</td>
+                            <td>$250</td>
+                            <td>1.0%</td>
+                            <td>20%</td>
+                            <td>10 years</td>
+                        </tr>
+                        <tr>
+                            <td>USVC Fund IV</td>
+                            <td>$100</td>
+                            <td>0.75%</td>
+                            <td>20%</td>
+                            <td>10 years</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: var(--space-2xl);">FAQ / Accordion Pattern</h3>
+                <div style="max-width: 700px;">
+                    <div style="border-bottom: 2px solid var(--warm-gray); padding: var(--space-lg) 0;">
+                        <h5 style="margin: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                            What is the minimum investment?
+                            <span style="font-size: 1.5rem;">+</span>
+                        </h5>
+                        <p style="margin-top: var(--space-md); color: var(--text-medium);">USVC offers multiple entry points. You can start with as little as $100 through our Starter portfolio, $500 for Core, or $1,000 for Premium tiers.</p>
+                    </div>
+                    <div style="border-bottom: 2px solid var(--warm-gray); padding: var(--space-lg) 0;">
+                        <h5 style="margin: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                            How are fees structured?
+                            <span style="font-size: 1.5rem;">+</span>
+                        </h5>
+                    </div>
+                    <div style="border-bottom: 2px solid var(--warm-gray); padding: var(--space-lg) 0;">
+                        <h5 style="margin: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                            What's the fund term?
+                            <span style="font-size: 1.5rem;">+</span>
+                        </h5>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IMAGERY & PHOTOGRAPHY -->
+            <section id="imagery" class="light">
+                <h2>Photography & Imagery Style</h2>
+                <div class="section-intro">
+                    <p>Visual content in USVC materials should convey institutional credibility with modern, tech-forward energy. Photography is clean, purposeful, and emotionally intelligent.</p>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h5>Subject Matter</h5>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                            <li>Diverse founders and teams (authentic, not staged)</li>
+                            <li>Product moments and workspace energy</li>
+                            <li>Data visualizations and abstract concepts</li>
+                            <li>Investor profiles and community moments</li>
+                            <li>Company milestones and growth moments</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h5>Visual Treatment</h5>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                            <li>Sharp focus, minimal depth of field blur</li>
+                            <li>Neutral to cool color temperature</li>
+                            <li>High contrast between subject and background</li>
+                            <li>Daylight or clean, institutional lighting</li>
+                            <li>No heavy filters or stylization</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h5>Composition</h5>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                            <li>Rule of thirds or centered composition</li>
+                            <li>Plenty of negative space</li>
+                            <li>Clean, uncluttered backgrounds</li>
+                            <li>Strong visual hierarchy</li>
+                            <li>No busy or distracting elements</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h5>Dark/Light Backgrounds</h5>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                            <li>Dark navy sections: light/bright photography</li>
+                            <li>Light sections: can support darker, moodier shots</li>
+                            <li>Always maintain 3:1+ contrast for readability</li>
+                            <li>Overlay with semi-transparent navy when needed</li>
+                            <li>Test text legibility over all images</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VOICE & TONE -->
+            <section id="voice" class="dark">
+                <h2>Voice, Tone & Messaging</h2>
+                <div class="section-intro">
+                    <p>How USVC speaks matters as much as how it looks. Our voice is consistent; our tone adapts to context.</p>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Our Voice</h3>
+                        <div class="card card-dark">
+                            <h5>Direct</h5>
+                            <p>We say what we mean. No buzzwords, no filler. Clear and unambiguous.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Authoritative</h5>
+                            <p>We know venture. Our experience speaks through confident, informed communication.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Accessible</h5>
+                            <p>We explain complex concepts simply. No jargon without explanation. Inclusive language.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Contrarian</h5>
+                            <p>We challenge the status quo. We question VC gatekeeping and democratize access.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Tone Across Contexts</h3>
+                        <div class="card card-dark">
+                            <h5>Marketing Materials</h5>
+                            <p>Confident, forward-looking, inspiring. We're inviting people into something exciting.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Product UI</h5>
+                            <p>Clear, concise, helpful. We're enabling users to make informed decisions.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Educational Content</h5>
+                            <p>Explanatory, patient, practical. We're teaching VC literacy to new investors.</p>
+                        </div>
+                        <div class="card card-dark">
+                            <h5>Support & Error States</h5>
+                            <p>Empathetic, solution-focused, reassuring. We're here to help resolve issues.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Messaging Examples</h3>
+                <div class="do-dont-grid" style="margin-top: var(--space-xl);">
+                    <div class="do">
+                        <h5>Good: Direct & Accessible</h5>
+                        <p>"Invest $100 and own real equity in pre-IPO companies. No minimums. No gatekeeping."</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Avoid: Jargon-Heavy</h5>
+                        <p>"Obtain syndicated LP participation across SPVs with accreditation-agnostic deal flow."</p>
+                    </div>
+                    <div class="do">
+                        <h5>Good: Confident & Contrarian</h5>
+                        <p>"Access to venture shouldn't be limited by your net worth. We changed that."</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Avoid: Apologetic</h5>
+                        <p>"We try to give retail investors some venture opportunities when possible."</p>
+                    </div>
+                    <div class="do">
+                        <h5>Good: Forward-Looking</h5>
+                        <p>"You're not just investing—you're backing the founders building tomorrow."</p>
+                    </div>
+                    <div class="dont">
+                        <h5>Avoid: Generic</h5>
+                        <p>"Diversify your portfolio with alternative assets."</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- APPLICATIONS -->
+            <section id="applications" class="light">
+                <h2>Design System Applications</h2>
+                <div class="section-intro">
+                    <p>The USVC design system extends beyond digital. Here's how to apply these principles to decks, marketing collateral, and extended brand touchpoints.</p>
+                </div>
+
+                <h3>Presentation Deck Template</h3>
+                <div class="card">
+                    <h5 style="margin-top: 0;">Key Guidelines</h5>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                        <li><strong>Cover Slide:</strong> Navy background, off-white USVC logo, large serif headline, tagline in light blue</li>
+                        <li><strong>Content Slides:</strong> Alternate between off-white and ice-blue backgrounds every 2-3 slides</li>
+                        <li><strong>Section Dividers:</strong> Full navy slide with off-white section title, no other content</li>
+                        <li><strong>Typography:</strong> Serif headlines (DM Serif Display), sans body (Inter), tight negative letter-spacing</li>
+                        <li><strong>Button/CTA:</strong> Navy or primary blue, sharp corners, generous padding</li>
+                        <li><strong>Spacing:</strong> 7.2rem between major sections, 3rem between points, 1.5rem between list items</li>
+                        <li><strong>Data Slides:</strong> Tables with navy headers, blue accent lines, light gray alternate rows</li>
+                        <li><strong>Master Slide:</strong> Subtle page border (light pink #FFE8E0) frames entire deck</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Email Template</h3>
+                <div class="card">
+                    <h5 style="margin-top: 0;">Email Header & Footer</h5>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-medium);">
+                        <li><strong>Header:</strong> Navy background, off-white USVC logo left-aligned, 60px height</li>
+                        <li><strong>Body:</strong> Off-white background, serif headlines, sans body text</li>
+                        <li><strong>CTA Buttons:</strong> Primary blue or navy, sharp corners, 200px max width, centered</li>
+                        <li><strong>Footer:</strong> Light gray background, small text (#798594), legal links in navy</li>
+                        <li><strong>Dividers:</strong> Warm gray (#EFF2F4) 1px horizontal lines between sections</li>
+                        <li><strong>Max Width:</strong> 600px (optimal for email clients)</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Social Media & Web Graphics</h3>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h5>LinkedIn & Twitter</h5>
+                        <p><strong>Image Size:</strong> 1200x630px</p>
+                        <p><strong>Design:</strong> Navy or ice-blue background, large white or navy sans headline, accent blue accent line or shape</p>
+                        <p><strong>Branding:</strong> USVC logo bottom-right corner, 60px width minimum</p>
+                        <p><strong>Text:</strong> Serif headline, short supporting text in body, 1 CTA button</p>
+                    </div>
+                    <div class="card">
+                        <h5>Instagram & Stories</h5>
+                        <p><strong>Feed Posts:</strong> 1080x1080px square</p>
+                        <p><strong>Stories:</strong> 1080x1920px vertical</p>
+                        <p><strong>Design:</strong> Bold typography, hero photography with navy overlay, accent blue elements</p>
+                        <p><strong>Series:** Create cohesive visual series with matching backgrounds and type treatments</p>
+                    </div>
+                    <div class="card">
+                        <h5>Landing Page Template</h5>
+                        <p><strong>Hero:</strong> Navy background, large serif H1, tagline in light blue, primary CTA button</p>
+                        <p><strong>Features:</strong> Alternate ice-blue/off-white sections with 3-column card grid</p>
+                        <p><strong>Testimonials:</strong> White cards with navy quote marks, light gray background</p>
+                        <p><strong>Footer:</strong> Navy background, multi-column layout, minimal links</p>
+                    </div>
+                    <div class="card">
+                        <h5>Print Marketing</h5>
+                        <p><strong>Business Cards:</strong> Navy one side, off-white reverse, centered logo/name, no border</p>
+                        <p><strong>Letterhead:</strong> Off-white page with subtle pink page border, small logo top-left</p>
+                        <p><strong>Brochure:</strong> Tri-fold with navy/ice-blue alternating panels, generous margins</p>
+                        <p><strong>Specifications:</strong> Sharp corners everywhere, serif headlines, sans body, 300dpi for print</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Interactive Components</h3>
+                <div class="dark-preview">
+                    <h4>Dark Section Preview</h4>
+                    <p>When designing for dark backgrounds, ensure:</p>
+                    <ul style="margin: var(--space-md) 0; padding-left: 1.5rem;">
+                        <li>Text is off-white (#FAFDFF) for minimum 4.5:1 contrast</li>
+                        <li>Accent blue (#0D84FF) pops against dark backgrounds</li>
+                        <li>Light blue (#B2D5FF) provides subtle emphasis</li>
+                        <li>Card backgrounds are deep navy or medium blue</li>
+                        <li>Buttons use ghost/outline style or bright blue</li>
+                    </ul>
+                    <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md);">
+                        <button class="button button-ghost-light">Secondary</button>
+                        <button class="button button-blue">Primary CTA</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-2xl);">Responsive Breakpoints</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Device</th>
+                            <th>Width</th>
+                            <th>Columns</th>
+                            <th>Padding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Desktop</td>
+                            <td>1200px+</td>
+                            <td>3-4 (grid)</td>
+                            <td>6rem horizontal</td>
+                        </tr>
+                        <tr>
+                            <td>Tablet</td>
+                            <td>768px - 1199px</td>
+                            <td>2 (grid)</td>
+                            <td>3rem horizontal</td>
+                        </tr>
+                        <tr>
+                            <td>Mobile</td>
+                            <td>&lt;768px</td>
+                            <td>1 (stacked)</td>
+                            <td>1.5rem horizontal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- CLOSING -->
+            <section class="hero">
+                <div>
+                    <h2>Ready to Build With USVC</h2>
+                    <p class="tagline">Apply these principles across every touchpoint.</p>
+                    <p style="font-size: 1.1rem; margin-bottom: var(--space-xl); max-width: 600px;">This brand system is a living document. As USVC evolves, so will our design language. Updates will be communicated to all stakeholders. Questions? Reach out to the brand team.</p>
+                    <button class="button button-ghost-light button-large">Access Resources</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Smooth scroll and active nav link management
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Update active nav based on scroll position
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+{
+  "brand": {
+    "name": "USVC",
+    "fullName": "US Venture Capital",
+    "tagline": "Back the companies building the future. Before it's obvious.",
+    "parent": "AngelList Asset Management",
+    "website": "https://usvc.com"
+  },
+  "color": {
+    "primary": {
+      "navy": { "hex": "#00172E", "rgb": "0, 23, 46", "usage": "Logo, primary buttons, dark sections, primary text" },
+      "snow": { "hex": "#FAFDFF", "rgb": "250, 253, 255", "usage": "Primary background, text on dark surfaces" },
+      "blue": { "hex": "#0D84FF", "rgb": "13, 132, 255", "usage": "Accent CTAs, links, interactive highlights" }
+    },
+    "navy-spectrum": {
+      "deep-navy": { "hex": "#122A43", "rgb": "18, 42, 67", "usage": "Secondary dark backgrounds" },
+      "mid-navy": { "hex": "#002B57", "rgb": "0, 43, 87", "usage": "Dark section variants" },
+      "medium-blue": { "hex": "#143D8D", "rgb": "20, 61, 141", "usage": "Gradients, data visualization" }
+    },
+    "blue-spectrum": {
+      "active-blue": { "hex": "#1C73E8", "rgb": "28, 115, 232", "usage": "Hover states, interactive elements" },
+      "link-blue": { "hex": "#0E72DA", "rgb": "14, 114, 218", "usage": "Inline links, secondary actions" },
+      "light-blue": { "hex": "#B2D5FF", "rgb": "178, 213, 255", "usage": "Subtle highlights, badges" },
+      "ice-blue": { "hex": "#EFF9FE", "rgb": "239, 249, 254", "usage": "Section backgrounds, subtle tints" },
+      "cloud-blue": { "hex": "#F0F7FF", "rgb": "240, 247, 255", "usage": "Alternate light backgrounds" },
+      "pale-blue": { "hex": "#EDF6FF", "rgb": "237, 246, 255", "usage": "Hover backgrounds" }
+    },
+    "neutral": {
+      "light-gray": { "hex": "#F2F3F9", "rgb": "242, 243, 249", "usage": "Card backgrounds, dividers" },
+      "warm-gray": { "hex": "#EFF2F4", "rgb": "239, 242, 244", "usage": "Borders, subtle separators" },
+      "text-dark": { "hex": "#243D58", "rgb": "36, 61, 88", "usage": "Secondary body text" },
+      "text-medium": { "hex": "#597597", "rgb": "89, 117, 151", "usage": "Tertiary text, captions" },
+      "text-muted": { "hex": "#798594", "rgb": "121, 133, 148", "usage": "Placeholder text, disabled states" },
+      "white": { "hex": "#FFFFFF", "rgb": "255, 255, 255" },
+      "black": { "hex": "#000000", "rgb": "0, 0, 0" }
+    },
+    "accent": {
+      "red": { "hex": "#FF6265", "rgb": "255, 98, 101", "usage": "Negative indicators, warnings" },
+      "green": { "hex": "#62BF59", "rgb": "98, 191, 89", "usage": "Positive indicators, success" }
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": "Romie, serif",
+      "fallbacks": "DM Serif Display, Playfair Display, Georgia, serif",
+      "weight": 500,
+      "letterSpacing": "-0.03em",
+      "usage": "Section headings, hero text, display type"
+    },
+    "body": {
+      "fontFamily": "Sohne, sans-serif",
+      "fallbacks": "Inter, Helvetica Neue, Arial, sans-serif",
+      "weight": 400,
+      "letterSpacing": "-0.01em",
+      "usage": "Body copy, buttons, UI elements, labels"
+    },
+    "logo": {
+      "fontFamily": "Sohne, sans-serif",
+      "weight": 800,
+      "letterSpacing": "-0.03em",
+      "textTransform": "uppercase"
+    },
+    "scale": {
+      "h1": { "size": "5.6rem", "weight": 500, "family": "display", "letterSpacing": "-0.03em" },
+      "h2": { "size": "3.6rem", "weight": 500, "family": "display", "letterSpacing": "-0.03em" },
+      "h3": { "size": "2.4rem", "weight": 500, "family": "display", "letterSpacing": "-0.03em" },
+      "h4": { "size": "1.8rem", "weight": 500, "family": "display", "letterSpacing": "-0.02em" },
+      "body-large": { "size": "1.25rem", "weight": 400, "family": "body", "letterSpacing": "-0.01em" },
+      "body": { "size": "1rem", "weight": 400, "family": "body", "letterSpacing": "-0.01em" },
+      "caption": { "size": "0.875rem", "weight": 400, "family": "body", "letterSpacing": "0" },
+      "overline": { "size": "0.75rem", "weight": 500, "family": "body", "letterSpacing": "0.08em", "textTransform": "uppercase" }
+    }
+  },
+  "spacing": {
+    "unit": "0.8rem",
+    "scale": {
+      "xs": "0.4rem",
+      "sm": "0.8rem",
+      "md": "1.6rem",
+      "lg": "3.2rem",
+      "xl": "4.8rem",
+      "2xl": "7.2rem",
+      "3xl": "9.6rem"
+    },
+    "sectionPadding": "7.2rem",
+    "containerPadding": "9.6rem"
+  },
+  "components": {
+    "button": {
+      "borderRadius": "0px",
+      "fontFamily": "body",
+      "fontWeight": 400,
+      "textTransform": "none",
+      "variants": {
+        "primary": { "bg": "#00172E", "text": "#FAFDFF", "hoverBg": "#122A43" },
+        "blue": { "bg": "#0D84FF", "text": "#FAFDFF", "hoverBg": "#1C73E8" },
+        "ghost": { "bg": "transparent", "text": "#00172E", "border": "1px solid #00172E" }
+      }
+    },
+    "card": {
+      "borderRadius": "0px",
+      "background": "#FFFFFF",
+      "border": "1px solid #EFF2F4"
+    },
+    "input": {
+      "borderRadius": "0px",
+      "border": "1px solid #EFF2F4",
+      "focusBorder": "#0D84FF"
+    }
+  },
+  "fontSources": {
+    "romie": {
+      "foundry": "Klim Type Foundry",
+      "url": "https://klim.co.nz/retail-fonts/romie/",
+      "license": "Commercial desktop + web license required"
+    },
+    "sohne": {
+      "foundry": "Klim Type Foundry",
+      "url": "https://klim.co.nz/retail-fonts/sohne/",
+      "license": "Commercial desktop + web license required"
+    }
+  }
+}
